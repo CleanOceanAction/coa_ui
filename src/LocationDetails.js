@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 
-import { Grid, Row, Col } from 'react-bootstrap';
+import { DropdownButton, MenuItem, Panel, Grid, Row, Col } from 'react-bootstrap';
 import Select from 'react-select';
 
 import { FilterComponent } from './FilterComponent';
 import { DirtyDozenComponent } from './DirtyDozen';
+import { SunburstChartComponent } from './SunburstChart';
+import { LineChartComponent } from './LineChart';
 
 import "./LocationDetails.css"
-
-
+import { DateRangeComponent } from './DateRange';
 
 const transformSiteNamesToSelectOptions =
   (data) => { return data.map((name)=>{ return {label: name, value: name}; }); };
@@ -56,47 +57,131 @@ class LocationDetails extends Component {
     // this.handleLocationChanged({value: data.site_names[2]});
   }
 
-  handleLocationChanged(selection, action)
-  {
-    console.log(selection, action);
-    this.dirtyDozen.setLocation(selection.value);
-  }
+    handleLocationChanged(selection, action)
+    {
+        console.log(selection, action);
+        this.dirtyDozen.setLocation(selection.value);
+    }
 
-  render() {
+    handleDateRangeChanged(startDate, endDate)
+    {
+        console.log("handleDateRangeChanged", startDate, endDate);
+        this.setState({
+            "startDate": startDate,
+            "endDate": endDate
+        });
+        //this.queryDirtyDozen(this.state.location.category, this.state.location.name, startDate, endDate);
+    }
+
+    render() {
     return (
+<<<<<<< HEAD
+        <div>
+            <Grid fluid>
+                <span>
+                    <h3 className="locDetailsHeading">Location Details </h3>
+                </span>
+                <span>
+                    <DropdownButton
+                        className="locDetailsHeading"
+                        bsStyle="default"
+                        bsSize="large"
+                        title="Site"
+                        key={0}
+                        id={`dropdown-basic-${0}`}>
+                        <MenuItem eventKey="1">County</MenuItem>
+                        <MenuItem eventKey="2">City</MenuItem>
+                        <MenuItem eventKey="3" active>Site</MenuItem>
+                    </DropdownButton>
+                </span>
+                <span>
+                    <DropdownButton
+                        className="locDetailsHeading"
+                        bsStyle="default"
+                        bsSize="large"
+                        title="Sandy Hook"
+                        key={0}
+                        id={`dropdown-basic-${0}`}>
+                        <MenuItem eventKey="1">Sandy Hook</MenuItem>
+                        <MenuItem eventKey="2">Cape May</MenuItem>
+                        <MenuItem eventKey="3" active>Red Bank</MenuItem>
+                    </DropdownButton>
+                </span>
+            </Grid>
+
+            <Panel>
+                <Panel.Heading>Debris Breakdown</Panel.Heading>
+                <Panel.Body>
+                    <Grid fluid>
+                        <Row>
+                            <Col md={12}>
+                                <DateRangeComponent
+                                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={6} >
+                                <Panel>
+                                    <Panel.Heading>Hierarchy</Panel.Heading>
+                                    <Panel.Body>
+                                        <SunburstChartComponent/>
+                                    </Panel.Body>
+                                </Panel>
+                            </Col>
+                            <Col md={6}>
+                                <Panel>
+                                    <Panel.Heading>Dirty Dozen</Panel.Heading>
+                                    <Panel.Body>
+                                        <DirtyDozenComponent/>
+                                    </Panel.Body>
+                                </Panel>
+                            </Col>
+                         </Row>
+                     </Grid>
+                  </Panel.Body>
+              </Panel>
+              <Panel>
+                  <Panel.Heading>Historical Trends</Panel.Heading>
+                  <Panel.Body>
+                      <Grid fluid>
+                          <Row>
+                              <Col md={9}>
+                                  <LineChartComponent/>
+                              </Col>
+                              <Col md={3}>
+                                  <FilterComponent/>
+                              </Col>
+                          </Row>
+                      </Grid>
+                  </Panel.Body>
+              </Panel>
+          </div>
+=======
       <div className="LocationDetails">
-        <Grid>
+        <Grid fluid>
         <Row>
-            <Col xs={2} md={1}>
-                <h4>Location</h4>
+          <Col xs={2}>
+            <h4>Site Details</h4>
             </Col>
-            <Col xs={8} md={4}>
+            <Col xs={10}>
               <Select
                 className="select-location"
-                options={this.state.locationOptions}
-                onChange={this.handleLocationChanged.bind(this)}
-                setValue={(a, b) => { console.log("select setValue", a, b); }}
-                ref={(selectLocation) => {this.selectLocation = selectLocation; }}
-              >
+                defaultValue={defaultSiteOptions[0]}
+                options={defaultGroupedOptions}
+                onChange={this.handleLocationChanged.bind(this)}>
               </Select>
             </Col>
-        </Row>
+          </Row>
+        <Col>
+        </Col>
         </Grid>
         <DirtyDozenComponent
           ref={(dirtyDozen) => {this.dirtyDozen = dirtyDozen; }}
           >
         </DirtyDozenComponent>
-        <Grid>
-          <Row className="show-grid">
-            <Col xs={12} md={8}>
-            </Col>
-            <Col xs={6} md={4}>
-              <FilterComponent />
-            </Col>
-          </Row>
-        </Grid>
       </div>
       
+>>>>>>> 6e59f9b5c3172b4a1aab3f0dabbc41df6bfd6f1c
     );
   }
 }

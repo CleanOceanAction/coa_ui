@@ -2,6 +2,27 @@
     text-align: left;
 }
 
+.locDetailsHeading h4 {
+    display: inline;
+    padding-right: 10px;
+}
+
+.locDetailsHeading p {
+    display: inline;
+    padding-right: 10px;
+}
+
+.locDetailsHeading {
+    display: inline;
+    padding-right: 10px;
+    float: none;
+}
+
+.dropdown {
+    float: none;
+    width: unset;
+}
+
 .select-location {
     width: 350px;
 }

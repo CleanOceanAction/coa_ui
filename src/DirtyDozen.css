@@ -1,19 +1,4 @@
-table {
-    margin-top: 5%;
-    margin-left: 10%;
-    float: left;
-    border-style: solid;
-    border-width: 1px;
-    width: 80%;
-}
-
 .nivo-bar{
-    margin-left: 5%;
-    width: 95%;
-    height: 260px;
-}
-
-.nivo-pie{
     margin-left: 5%;
     width: 95%;
     height: 260px;

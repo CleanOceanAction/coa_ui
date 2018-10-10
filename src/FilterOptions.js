@@ -20,15 +20,15 @@ function getCheckboxLabels(selections)
 }
 
 export class FilterOptions extends Component {
-      constructor(props)
-      {
-          super(props);
-          this.state = {
-              options: this.props.defaultSelections ? this.props.defaultSelections : [''],
-              value: '',
-              suggestions: []
-          };
-      }
+  constructor(props)
+  {
+      super(props);
+      this.state = {
+          options: this.props.defaultSelections ? this.props.defaultSelections : [''],
+          value: '',
+          suggestions: []
+      };
+  }
 
       
   // Teach Autosuggest how to calculate suggestions for any given input value.
@@ -88,15 +88,14 @@ export class FilterOptions extends Component {
       });
     };
       
-    optionsChanged = (newOptions) => {
-      this.setState({
-        options: newOptions
-      });
-      this.props.selectionsChanged(newOptions);
-    }
+  optionsChanged = (newOptions) => {
+    this.setState({
+      options: newOptions
+    });
+    this.props.selectionsChanged(newOptions);
+  }
   
-    render() {
-        
+  render() {   
     const { value, suggestions } = this.state;
     // Autosuggest will pass through all these props to the input.
         const inputProps = {

@@ -1,19 +1,11 @@
 .date-range h4 {
-    display: block;
+    display: inline;
     text-align: left;
-    width: 200px;
+    padding-right: 10px;
 }
 
-.date-range {
-}
-
-.select-min {
+.select {
     display: inline-block;
-    width: 160px;
-}
-
-.select-max {
-    margin-left: 35px;
-    display: inline-block;
-    width: 160px;
+    width: 150px;
+    padding-right: 10px;
 }

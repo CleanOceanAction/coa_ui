@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 
+import { DropdownButton, MenuItem, Panel, Grid, Row, Col } from 'react-bootstrap';
+
 
 import './DateRange.css';
 
@@ -50,21 +52,28 @@ export class DateRangeComponent extends Component {
     render() {
       return (
         <div className="date-range">
-        <h4>Select Date Range:</h4>
-        <Select
-          className="select-min"
-          defaultValue={{value: "2018-01-01", label: "Spring 2018"}}
-          options={defaultOptions}
-          onChange={this.onMinDateChanged.bind(this)}
-          >
-        </Select>
-        <Select
-          className="select-max"
-          defaultValue={{ value: "2018-08-01", label: "Fall 2018" }}
-          options={defaultOptions}
-          onChange={this.onMaxDateChanged.bind(this)}
-          >
-        </Select>
+            <span><h4>Date Range:</h4></span>
+            <span>
+                <Select
+                    bsStyle="default"
+                    className="select"
+                    defaultValue={{value: "2018-01-01", label: "Spring 2018"}}
+                    options={defaultOptions}
+                    onChange={this.onMinDateChanged.bind(this)}
+                    >
+                </Select>
+            </span>
+            <span><h4> - </h4></span>
+            <span>
+                <Select
+                    bsStyle="default"
+                    className="select"
+                    defaultValue={{ value: "2018-08-01", label: "Fall 2018" }}
+                    options={defaultOptions}
+                    onChange={this.onMaxDateChanged.bind(this)}
+                    >
+                </Select>
+            </span>
         </div>
       );
 

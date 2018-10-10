@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Table, Panel, Grid, Row, Col } from 'react-bootstrap';
 
 import { ResponsiveBar } from '@nivo/bar'
 import { ResponsivePie } from '@nivo/pie'
@@ -7,7 +7,6 @@ import { ResponsivePie } from '@nivo/pie'
 import { DateRangeComponent } from './DateRange'
 
 import './DirtyDozen.css';
-
 
 
 const DEFAULT_DATA = {
@@ -48,14 +47,17 @@ function transformDirtyDozenDataForPieChart(data)
 function transformDirtyDozenDataForTable(data)
 {
     let tableData = [];
+    let i = 1;
     for (let key in data)
     {
-        tableData.push((<tr key={key}>
-            <td>{key}</td>
+        tableData.push((
+        <tr>
+            <td>{i}</td>
             <td>{key}</td>
             <td>{data[key]}</td>
             <td>{roundToOneDecimalPercentage(data[key])}</td>
         </tr>));
+        i++;
     }
     return tableData;
 }
@@ -143,208 +145,101 @@ export class DirtyDozenComponent extends Component {
         }
     }
 
-    render() {
-      return (
-        <Grid>
-          <Row>
-            <Col xs={4} md={4}>
-                <DateRangeComponent
-                    onDateRangeChanged={this.handleDateRangeChanged.bind(this)}
-                />
-            </Col>
-            <Col xs={8} md={8}>
-              <h3>Dirty Dozen</h3>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={4} md={4}>
-            <div className="nivo-pie">
-            <ResponsivePie
-                data={this.state.nivoPieChartData}
-                margin={{
-                    "top": 40,
-                    "right": 80,
-                    "bottom": 80,
-                    "left": 80
-                }}
-                innerRadius={0.5}
-                padAngle={0.7}
-                cornerRadius={3}
-                colors="nivo"
-                colorBy="id"
-                borderWidth={1}
-                borderColor="inherit:darker(0.2)"
-                radialLabelsSkipAngle={10}
-                radialLabelsTextXOffset={6}
-                radialLabelsTextColor="#333333"
-                radialLabelsLinkOffset={0}
-                radialLabelsLinkDiagonalLength={16}
-                radialLabelsLinkHorizontalLength={24}
-                radialLabelsLinkStrokeWidth={1}
-                radialLabelsLinkColor="inherit"
-                slicesLabelsSkipAngle={10}
-                slicesLabelsTextColor="#333333"
-                animate={true}
-                motionStiffness={90}
-                motionDamping={15}
-                defs={[
-                    {
-                        "id": "dots",
-                        "type": "patternDots",
-                        "background": "inherit",
-                        "color": "rgba(255, 255, 255, 0.3)",
-                        "size": 4,
-                        "padding": 1,
-                        "stagger": true
-                    },
-                    {
-                        "id": "lines",
-                        "type": "patternLines",
-                        "background": "inherit",
-                        "color": "rgba(255, 255, 255, 0.3)",
-                        "rotation": -45,
-                        "lineWidth": 6,
-                        "spacing": 10
-                    }
-                ]}
-                fill={[
-                   
-                ]}
-                legends={[
-                    {
-                        "anchor": "bottom",
-                        "direction": "row",
-                        "translateY": 56,
-                        "itemWidth": 100,
-                        "itemHeight": 18,
-                        "itemTextColor": "#999",
-                        "symbolSize": 18,
-                        "symbolShape": "circle",
-                        "effects": [
+        render() {
+            return (
+                <Grid fluid>
+                    <div className="nivo-bar">
+                    <ResponsiveBar
+                        data={this.state.nivoBarChartData}
+                        height={260}
+                        keys={[
+                            "count",
+                        ]}
+                        indexBy="item"
+                        margin={{
+                            "top": 20,
+                            "right": 60,
+                            "bottom": 100,
+                            "left": 60
+                        }}
+                        layout="vertical"
+                        padding={0.3}
+                        colors="#0073FF"
+                        colorBy="id"
+                        defs={[]}
+                        fill={[
                             {
-                                "on": "hover",
-                                "style": {
-                                    "itemTextColor": "#000"
-                                }
+                                "match": {
+                                    "id": "count"
+                                },
+                                "id": "lines"
                             }
-                        ]
-                    }
-                ]}
-            />
-            </div>
-            </Col>
-            <Col xsHidden md={4}>
-            <div className="nivo-bar">
-            <ResponsiveBar
-                data={this.state.nivoBarChartData}
-                height={260}
-                keys={[
-                    "count",
-                ]}
-                indexBy="item"
-                margin={{
-                    "top": 50,
-                    "right": 130,
-                    "bottom": 50,
-                    "left": 60
-                }}
-                padding={0.3}
-                colors="d320c"
-                colorBy="id"
-                defs={[
-                    {
-                        "id": "dots",
-                        "type": "patternDots",
-                        "background": "inherit",
-                        "color": "#38bcb2",
-                        "size": 4,
-                        "padding": 1,
-                        "stagger": true
-                    },
-                    {
-                        "id": "lines",
-                        "type": "patternLines",
-                        "background": "inherit",
-                        "color": "#eed312",
-                        "rotation": -45,
-                        "lineWidth": 6,
-                        "spacing": 10
-                    }
-                ]}
-                fill={[
-                    {
-                        "match": {
-                            "id": "count"
-                        },
-                        "id": "lines"
-                    }
-                ]}
-                borderColor="#ff8000"
-                axisBottom={{
-                    "orient": "bottom",
-                    "tickSize": 5,
-                    "tickPadding": 5,
-                    "tickRotation": 0,
-                    "legend": "item",
-                    "legendPosition": "middle",
-                    "legendOffset": 36
-                }}
-                axisLeft={{
-                    "orient": "left",
-                    "tickSize": 5,
-                    "tickPadding": 5,
-                    "tickRotation": 0,
-                    "legend": "count",
-                    "legendPosition": "middle",
-                    "legendOffset": -40
-                }}
-                labelSkipWidth={12}
-                labelSkipHeight={12}
-                labelTextColor="inherit:darker(1.6)"
-                animate={true}
-                motionStiffness={90}
-                motionDamping={15}
-                legends={[
-                    // {
-                    //     "dataFrom": "keys",
-                    //     "anchor": "bottom-right",
-                    //     "direction": "column",
-                    //     "translateX": 120,
-                    //     "itemWidth": 100,
-                    //     "itemHeight": 20,
-                    //     "itemsSpacing": 2,
-                    //     "symbolSize": 20
-                    // }
-                ]}
-                theme={{
-                    "tooltip": {
-                        "container": {
-                            "fontSize": "13px"
-                        }
-                    },
-                    "labels": {
-                        "textColor": "#444"
-                    }
-                }}
-                />
-            </div>
-            </Col>
-            <Col xs={6} md={4}>
-                <table border="1">
-                <tbody>
-                <tr>
-                    <th>#</th>
-                    <th>Debris Item</th>
-                    <th>Count</th>
-                    <th>Percentage Total</th>
-                </tr>
-                {this.state.tableItems}
-                </tbody>
-                </table>
-            </Col>
-          </Row>
-        </Grid>
-      );
-
-    }
+                        ]}
+                        borderColor="#ff8000"
+                        axisBottom={{
+                            "orient": "bottom",
+                            "tickSize": 5,
+                            "tickPadding": 5,
+                            "tickRotation": 45,
+                            "legend": "Items",
+                            "legendPosition": "middle",
+                            "legendOffset": 85
+                        }}
+                        axisLeft={{
+                            "orient": "left",
+                            "tickSize": 5,
+                            "tickPadding": 5,
+                            "tickRotation": 0,
+                            "legend": "Count",
+                            "legendPosition": "middle",
+                            "legendOffset": -45
+                        }}
+                        enableGridX={false}
+                        enableGridY={false}
+                        labelSkipWidth={12}
+                        labelSkipHeight={12}
+                        labelTextColor="inherit:darker(1.6)"
+                        animate={true}
+                        motionStiffness={90}
+                        motionDamping={15}
+                        legends={[
+                            // {
+                            //     "dataFrom": "keys",
+                            //     "anchor": "bottom-right",
+                            //     "direction": "column",
+                            //     "translateX": 120,
+                            //     "itemWidth": 100,
+                            //     "itemHeight": 20,
+                            //     "itemsSpacing": 2,
+                            //     "symbolSize": 20
+                            // }
+                        ]}
+                        theme={{
+                            "tooltip": {
+                                "container": {
+                                    "fontSize": "13px"
+                                }
+                            },
+                            "labels": {
+                                "textColor": "#444"
+                            }
+                        }}
+                        />
+                    </div>
+                    <Table condensed responsive bordered>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Debris Item</th>
+                                <th>Count</th>
+                                <th>% Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.tableItems}
+                        </tbody>
+                    </Table>
+                </Grid>
+            );
+        }
 }
