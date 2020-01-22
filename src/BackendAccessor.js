@@ -15,6 +15,8 @@ export function getData(endpoint) {
       console.log(`postData url=${url}/${endpoint}`);
 
       return fetch(`${url}/${endpoint}`,
-                  {"method": "POST", "mode": "cors",body:JSON.stringify(body)});
+                  {"method": "POST", "mode": "cors",body,headers:{'Accept':'application/json',
+                  //'Content-Type': 'multipart/form-data'
+                }});
 
   }

@@ -12,12 +12,14 @@ class FileUploader extends Component {
     }
     openFile(e) {
         console.log(e)
-        ExcelRenderer(e.target.files[0],(err,resp) => {
+        const form = e.target.files[0]
+        ExcelRenderer(form,(err,resp) => {
             if(err){
                 console.log(err);
             }
             else{
                 this.setState({
+                    file: form,
                     cols: resp.cols,
                     rows: resp.rows
                 })
@@ -33,6 +35,24 @@ class FileUploader extends Component {
     render() {
         console.log(this.state)
         let table=null;if(this.state.rows){table=(<OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />)}
+        const list = this.state.errors;
+        console.log('list', list)
+        let errors = null;
+        if (list) {
+          errors = (
+            <div>
+                  <h1 style={{ color: 'red'}} >Errors</h1>
+                  <h5>
+                    <ul>
+                      {list && list.map(function(item) {
+                        return <li key ={item}>{item}</li>;
+                      })}
+                    </ul>
+                    </h5>
+            </div>
+
+          )
+        }
         return (
             <div>
             <input id={"excel"} label='Upload File' type="file" className="file-uploader"
@@ -42,12 +62,25 @@ class FileUploader extends Component {
              <button onClick = {this.submitdata}>
                 Submit
               </button>
+              {errors}
               </div>
         )}
       submitdata(){
-        postData ("allValidationChecks", {rows:this.state.rows, cols: this.state.cols})
-      }
-
-}
+        const formData = new FormData();
+        formData.append ('file',this.state.file)
+        formData.append('filename','file.xlsx')
+        postData ("allValidationChecks", formData).then((result)=> {
+          return result.json()
+        }).then(data=>{
+          console.log(data, 'hello')
+          this.setState({
+            errors: data
+          })
+        }).catch((error)=>{
+          console.log(error)
+        })
+    }
+  }
+  //<h1 style = {{ color: 'red'}} >Errors</h1>
 
  export default FileUploader;
