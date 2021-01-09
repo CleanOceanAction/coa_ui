@@ -1,24 +1,29 @@
 import './UserSignInForm.css';
 
 import React, { useState, useContext } from 'react';
-// import { postData } from "../BackendAccessor.js";
+import { postData } from "../BackendAccessor.js";
 import { userContext } from "./UserContext";
 
 export default function UserSignInForm(props) {
     const {setUserState} = useContext(userContext);
     const [name, setName] = useState("");
-    // const [username, setUsername] = useState("");
-    // const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     const attemptLogIn = () => {
         const contextObj = {
             "name": name
         };
         setUserState(contextObj);
-        /*postData('login', {"username": username, "password": password})
+        postData('login', {"username": username, "password": password})
             .then((response) => {
-                console.log(response);
-            });*/
+                response.json().then((data) => {
+                    setUserState({
+                        "name": name,
+                        "token": data.token
+                    });
+                });
+            });
     };
 
     const onSubmit = (e) => {
@@ -35,7 +40,7 @@ export default function UserSignInForm(props) {
                 placeholder="Please enter your name"
                 onChange={(e) => setName(e.target.value)}
             />
-            {/*<br/>
+            <br/>
             <input
                 name="username"
                 type="text"
@@ -49,7 +54,7 @@ export default function UserSignInForm(props) {
                 value={password}
                 placeholder="Please enter your password"
                 onChange={(e) => setPassword(e.target.value)}
-            />*/}
+            />
             <br/><br/>
             <input type="submit" value="Enter" onClick={onSubmit}/>
         </form>
