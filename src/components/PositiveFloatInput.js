@@ -1,19 +1,19 @@
-import './PositiveIntegerInput.css';
+import './PositiveFloatInput.css';
 
 import React from "react";
 
 import NumberInput from "./NumberInput.js";
 
-export default function PositiveIntegerInput({name, placeholder, value, onChanged}) {
+export default function PositiveFloatInput({name, placeholder, value, onChanged}) {
 
     return(
         <NumberInput
             name={name}
-            pattern="[1-9]\d*" // only positive integers
+            pattern="[0-9]\d*\.?\d*$" // only postiive numbers
             placeholder={placeholder}
             value={value}
             onChanged={onChanged}
-            parse={(val) => parseInt(val, 10)}
+            parse={(val) => parseFloat(val)}
         />
     );
 }
