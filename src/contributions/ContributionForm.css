@@ -1,0 +1,12 @@
+.name {
+    min-inline-size: 200px;
+    border: 1px solid black;
+    display: inline-block;
+    background-color: whitesmoke;
+    margin-right: 4px;
+}
+
+.invisible {
+    visibility: hidden;
+    display: none;
+}

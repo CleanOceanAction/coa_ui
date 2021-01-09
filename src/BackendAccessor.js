@@ -1,3 +1,4 @@
+
 export function getData(endpoint) {
     const url = process.env.NODE_ENV === "development" ?
         "http://localhost:5000" : "http://coa-flask-app-prod.us-east-1.elasticbeanstalk.com";
