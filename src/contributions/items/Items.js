@@ -20,18 +20,6 @@ const DEFAULT_SORTING = [
 export default function Items() {
     const [items, setItems] = useState([]);
 
-    const onAddClicked = () => {
-        console.log("Add item clicked.");
-    };
-
-    const onEditClicked = (item_id) => {
-        console.log("Edit item clicked.", item_id);
-    };
-
-    const onDeleteClicked = (item_id) => {
-        console.log("Delete item clicked.", item_id);
-    };
-
     useEffect(() => {
         getItems()
         .then((itemList) => {
@@ -46,9 +34,6 @@ export default function Items() {
                 rows={items}
                 rowIdPropertyName="item_id"
                 defaultSorting={DEFAULT_SORTING}
-                //onAddClicked={onAddClicked}
-                //onEditClicked={onEditClicked}
-                //onDeleteClicked={onDeleteClicked}
             />
         </div>
     );
