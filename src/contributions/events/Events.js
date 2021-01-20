@@ -2,25 +2,11 @@ import './Events.css';
 
 import React, { useState, useEffect } from 'react';
 
-import { getData } from "../../BackendAccessor.js";
+import DataGrid from "../../components/DataGrid";
 import EventAdd from "./EventAdd";
+import { getEvents, deleteEvent } from "./EventAccessor.js";
+import { getSites } from "../sites/SiteAccessor.js";
 
-import {
-    EditingState,
-    FilteringState,
-    IntegratedFiltering,
-    IntegratedSorting,
-    SortingState,
-    TableColumnVisibility,
-} from '@devexpress/dx-react-grid';
-import {
-    Grid,
-    Table,
-    TableEditRow,
-    TableEditColumn,
-    TableHeaderRow,
-    TableFilterRow,
-} from '@devexpress/dx-react-grid-bootstrap3';
 
 const EVENT_COLUMNS = [
     { name: "event_id", title: "Event Id" },
@@ -42,6 +28,10 @@ const COLUMN_EXTENSIONS = [
     { columnName: "walking_distance", width: 155 }
 ];
 
+const DEFAULT_SORTING = [
+    { columnName: 'county', direction: 'asc'}
+];
+
 export default function Events() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [season, setSeason] = useState(new Date().getMonth() > 5 ? "Fall" : "Spring");
@@ -49,72 +39,57 @@ export default function Events() {
     const [events, setEvents] = useState([]);
     const [eventsMap, setEventsMap] = useState({});
 
-    const [editingRowIds] = useState([]);
-    const [defaultHiddenColumnNames] = useState("event_id");
     const [selectedEvent, setSelectedEvent] = useState(undefined);
-
-    const getRowId = (row) => row.event_id;
-
-    const setEditingRowIds = (rowIds) => {
-        console.log("editingRowIds", rowIds);
-        const event = eventsMap[rowIds[0]];
-        setSelectedEvent(event);
-    };
 
     const onEditEventClose = () => {
         setSelectedEvent(undefined);
     }
 
-    const commitChanges = ({added, updated, deleted}) => {
-        console.log("commitChanges", added, updated, deleted);
-        let updatedEvents;
-        if (deleted.length !== 0) {
-            const deletedSet = new Set(deleted);
-            console.log("found events to delete", deletedSet);
-            updatedEvents = events.filter(event => !deletedSet.has(event.event_id));
-            deletedSet.forEach((deletedEvent) => {
-                console.log("Deleting event:", deletedEvent);
-            });
-            setEvents(updatedEvents);
-        }
+    const onAddClicked = () => {
+        console.log("Add event clicked.");
+    };
+
+    const onEditClicked = (event_id) => {
+        console.log("Edit event clicked.", event_id);
+        const event = eventsMap[event_id];
+        setSelectedEvent(event);
+    };
+
+    const onDeleteClicked = (event_id) => {
+        console.log("Delete event clicked.", event_id);
+        deleteEvent(event_id);
+    };
+
+    const onRowSelected = (event_id) => {
+        console.log("Row selected.", event_id);
     };
 
     useEffect(() => {
         console.log(year, season);
         const updateEvents = () => {
-            getData("events?volunteer_year=" + year + "&volunteer_season=" + season) 
-            .then((results) => {
-                results.json().then((response) => {
-                    console.log("events response", response);
-                    const eventList = [];
-                    const eventsObj = {};
-                    response.events.forEach((event) => {
-                        const site = siteMap[event["site_id"]];
-                        const eventObj = {...site, ...event};
-                        eventList.push(eventObj);
-                        eventsObj[event.event_id] = eventObj;
-                    });
-                    setEvents(eventList);
-                    setEventsMap(eventsObj);
+            getEvents(year, season)
+            .then((responseEvents) => {
+                console.log("events response", responseEvents);
+                const eventList = [];
+                const eventsObj = {};
+                responseEvents.forEach((event) => {
+                    const site = siteMap[event["site_id"]];
+                    const eventObj = {...site, ...event};
+                    eventList.push(eventObj);
+                    eventsObj[event.event_id] = eventObj;
                 });
-            })
-            .catch(() => {
-                console.log("Failed to execute query for events");
+                setEvents(eventList);
+                setEventsMap(eventsObj);
             });
         }
         if (Object.keys(siteMap).length === 0) {
-            getData("sites")
-            .then((results) => {
-                results.json().then((response) => {
-                    const sitesObj = {};
-                    response.sites.forEach((site) => {
-                        sitesObj[site["site_id"]] = site;
-                    });
-                    setSiteMap(sitesObj);
+            getSites()
+            .then((sites) => {
+                const sitesObj = {};
+                sites.forEach((site) => {
+                    sitesObj[site["site_id"]] = site;
                 });
-            })
-            .catch(() => {
-                console.log("Failed to execute query for sites");
+                setSiteMap(sitesObj);
             });
         }
         else {
@@ -146,37 +121,21 @@ export default function Events() {
             </select><br/>
             <EventAdd
                 event={selectedEvent}
+                year={year}
+                season={season}
                 onClose={onEditEventClose}
             /><br/><br/>
-            <Grid
+            <DataGrid
                 rows={events}
                 columns={EVENT_COLUMNS}
-                getRowId={getRowId}
-            >
-                <FilteringState defaultFilters={[]} />
-                <IntegratedFiltering />
-                <EditingState
-                    editingRowIds={editingRowIds}
-                    onEditingRowIdsChange={setEditingRowIds}
-                    onCommitChanges={commitChanges}
-                />
-                <SortingState
-                    defaultSorting={[{ columnName: 'county', direction: 'asc'}]}
-                />
-                <IntegratedSorting />
-                <Table columnExtensions={COLUMN_EXTENSIONS} />
-                <TableColumnVisibility
-                    defaultHiddenColumnNames={defaultHiddenColumnNames}
-                />
-                <TableHeaderRow showSortingControls />
-                <TableFilterRow />
-                <TableEditRow />
-                <TableEditColumn
-                    showEditCommand
-                    showDeleteCommand
-                />
-            </Grid>
+                columnExtensions={COLUMN_EXTENSIONS}
+                rowIdPropertyName="event_id"
+                defaultSorting={DEFAULT_SORTING}
+                onAddClicked={onAddClicked}
+                onEditClicked={onEditClicked}
+                onDeleteClicked={onDeleteClicked}
+                onRowSelected={onRowSelected}
+            />
         </div>
     );
 }
-  
