@@ -4,6 +4,8 @@ import React, { useState, useContext } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
 import Events from "./events/Events";
+import Items from "./items/Items";
+import Sites from "./sites/Sites";
 import { userContext } from "./UserContext";
 
 export default function ContributionForm() {
@@ -18,7 +20,6 @@ export default function ContributionForm() {
 
     return(
         <div>
-            <h3>Please enter your contribution!</h3>
             <div className="name">{userState.name}</div>
             <button
                 onClick={onLogout}>
@@ -30,14 +31,13 @@ export default function ContributionForm() {
                 activeKey={selectedTab}
                 onSelect={setSelectedTab}>
                 <Tab eventKey="events" title="Cleanup Events">
-                    <Events
-                    />
+                    <Events/>
                 </Tab>
                 <Tab eventKey="items" title="Items">
-                    <p>Items</p>
+                    <Items/>
                 </Tab>
                 <Tab eventKey="sites" title="Sites">
-                    <p>Sites</p>
+                    <Sites/>
                 </Tab>
             </Tabs>
         </div>

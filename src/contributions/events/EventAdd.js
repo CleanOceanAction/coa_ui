@@ -1,9 +1,11 @@
 import './EventAdd.css';
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 import EventDetails from "./EventDetails.js";
 import SiteSelector from "./SiteSelector.js";
+import { postData } from "../../BackendAccessor.js";
+import { userContext } from "../UserContext";
 
 export default function EventAddButton(props) {
     const [isPopupVisible, setIsPopupVisible] = useState(undefined);
@@ -14,6 +16,7 @@ export default function EventAddButton(props) {
     const [walkingDistance, setWalkingDistance] = useState(null);
 
     const [hasUpdates, setHasUpdates] = useState(false);
+    const {userState} = useContext(userContext);
 
     const handleClose = () => {
         setIsPopupVisible(false);
@@ -29,6 +32,7 @@ export default function EventAddButton(props) {
             console.log("NumTrashBags: ", numTrashBags);
             console.log("trashWeight: ", trashWeight);
             console.log("WalkingDistance: ", walkingDistance);
+            updateEvent();
             handleClose();
         }
         else {
@@ -37,8 +41,43 @@ export default function EventAddButton(props) {
             console.log("NumTrashBags: ", numTrashBags);
             console.log("trashWeight: ", trashWeight);
             console.log("WalkingDistance: ", walkingDistance);
+            addEvent();
             handleClose();
         }
+    }
+
+    const addEvent = () => {
+        const request = generateEventDetailsObj();
+        postData('events/add', request, userState.token)
+            .then((response) => {
+                response.json().then((data) => {
+                    console.log("Add event", data);
+                });
+            });
+    }
+
+    const updateEvent = () => {
+        const request = generateEventDetailsObj();
+        request["event_id"] = props.event.event_id;
+        postData('events/update', request, userState.token)
+            .then((response) => {
+                response.json().then((data) => {
+                    console.log("Add event", data);
+                });
+            });
+    };
+
+    const generateEventDetailsObj = () => {
+        return {
+            "updated_by": userState.name,
+            "site_id": siteId,
+            "volunteer_year": props.year,
+            "volunteer_season": props.season,
+            "volunteer_cnt": numVolunteers,
+            "trashbag_cnt": numTrashBags,
+            "trash_weight": trashWeight,
+            "walking_distance": walkingDistance
+        };
     }
 
     useEffect(() => {
