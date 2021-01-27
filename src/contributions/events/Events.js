@@ -40,7 +40,6 @@ export default function Events() {
     const [events, setEvents] = useState([]);
     const [selectedEditEvent, setSelectedEditEvent] = useState(undefined);
     const [showPopup, setShowPopup] = useState(false);
-    const [drillDownEvent, setDrillDownEvent] = useState(undefined);
 
     const onAddClicked = () => {
         console.log("Add event clicked.");
@@ -67,7 +66,7 @@ export default function Events() {
     const onRowSelected = (event_id) => {
         console.log("Row selected.", event_id);
         const event = events.find(event => event.event_id === event_id);
-        setDrillDownEvent(event);
+        // TODO: drill down to event items page
     };
 
     const refreshEvents = useCallback(
