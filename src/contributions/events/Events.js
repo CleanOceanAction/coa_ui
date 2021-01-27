@@ -1,9 +1,9 @@
 import './Events.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import DataGrid from "../../components/DataGrid";
-import EventAdd from "./EventAdd";
+import EventPopup from "./EventPopup";
 import { getEvents, deleteEvent } from "./EventAccessor.js";
 import { getSites } from "../sites/SiteAccessor.js";
 
@@ -13,6 +13,7 @@ const EVENT_COLUMNS = [
     { name: "county", title: "County" },
     { name: "town", title: "Town" },
     { name: "site_name", title: "Site" },
+    { name: "trash_items_cnt", title: "# of Items" },
     { name: "volunteer_cnt", title: "# of Volunteers" },
     { name: "trashbag_cnt", title: "# of Trashbags" },
     { name: "trash_weight", title: "Trash Wgt (lbs)" },
@@ -37,66 +38,73 @@ export default function Events() {
     const [season, setSeason] = useState(new Date().getMonth() > 5 ? "Fall" : "Spring");
     const [siteMap, setSiteMap] = useState({});
     const [events, setEvents] = useState([]);
-    const [eventsMap, setEventsMap] = useState({});
-
-    const [selectedEvent, setSelectedEvent] = useState(undefined);
-
-    const onEditEventClose = () => {
-        setSelectedEvent(undefined);
-    }
+    const [selectedEditEvent, setSelectedEditEvent] = useState(undefined);
+    const [showPopup, setShowPopup] = useState(false);
+    const [drillDownEvent, setDrillDownEvent] = useState(undefined);
 
     const onAddClicked = () => {
         console.log("Add event clicked.");
+        setShowPopup(true);
     };
 
     const onEditClicked = (event_id) => {
         console.log("Edit event clicked.", event_id);
-        const event = eventsMap[event_id];
-        setSelectedEvent(event);
+        const event = events.find(event => event.event_id === event_id);
+        if (event) {
+            setSelectedEditEvent(event);
+            setShowPopup(true);
+        }
     };
 
     const onDeleteClicked = (event_id) => {
         console.log("Delete event clicked.", event_id);
-        deleteEvent(event_id);
+        deleteEvent(event_id).then(() => {
+            console.log("On delete success: refreshing events page.");
+            refreshEvents();
+        });
     };
 
     const onRowSelected = (event_id) => {
         console.log("Row selected.", event_id);
+        const event = events.find(event => event.event_id === event_id);
+        setDrillDownEvent(event);
     };
 
-    useEffect(() => {
-        console.log(year, season);
-        const updateEvents = () => {
+    const refreshEvents = useCallback(
+        () => {
             getEvents(year, season)
             .then((responseEvents) => {
                 console.log("events response", responseEvents);
                 const eventList = [];
-                const eventsObj = {};
                 responseEvents.forEach((event) => {
                     const site = siteMap[event["site_id"]];
                     const eventObj = {...site, ...event};
                     eventList.push(eventObj);
-                    eventsObj[event.event_id] = eventObj;
                 });
                 setEvents(eventList);
-                setEventsMap(eventsObj);
             });
-        }
+        }, [year, season, siteMap]
+    );
+
+    useEffect(() => {
+        console.log(year, season);
         if (Object.keys(siteMap).length === 0) {
             getSites()
             .then((sites) => {
-                const sitesObj = {};
-                sites.forEach((site) => {
-                    sitesObj[site["site_id"]] = site;
-                });
-                setSiteMap(sitesObj);
+                if (sites) {
+                    const sitesObj = {};
+                    sites.forEach((site) => {
+                        sitesObj[site["site_id"]] = site;
+                    });
+                    setSiteMap(sitesObj);
+                }
             });
         }
         else {
-            updateEvents();
+            refreshEvents();
         }
         
-    }, [year, season, siteMap]);
+    }, [year, season, siteMap, refreshEvents]);
 
     return(
         <div>
@@ -119,12 +127,6 @@ export default function Events() {
                 <option value="Spring">Spring</option>
                 <option value="Fall">Fall</option>
             </select><br/>
-            <EventAdd
-                event={selectedEvent}
-                year={year}
-                season={season}
-                onClose={onEditEventClose}
-            /><br/><br/>
             <DataGrid
                 rows={events}
                 columns={EVENT_COLUMNS}
@@ -135,6 +137,14 @@ export default function Events() {
                 onEditClicked={onEditClicked}
                 onDeleteClicked={onDeleteClicked}
                 onRowSelected={onRowSelected}
+            />
+            <EventPopup
+                year={year}
+                season={season}
+                show={showPopup}
+                selectedEvent={selectedEditEvent}
+                onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
+                onEventChange={refreshEvents}
             />
         </div>
     );

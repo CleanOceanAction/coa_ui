@@ -16,10 +16,8 @@ export function deleteEvent(event_id) {
     const request = {
         "event_id": event_id
     };
-    postData('events/remove', request)
+    return postData('events/remove', request)
         .then((response) => {
-            response.json().then(() => {
-                console.log("Event deleted.", event_id);
-            });
+            return response.json();
         });
 }
