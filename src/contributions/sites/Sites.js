@@ -1,8 +1,9 @@
 import './Sites.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DataGrid from "../../components/DataGrid";
-import { getSites } from "./SiteAccessor.js";
+import Popup from "../../components/Popup";
+import { getSites, deleteSite } from "./SiteAccessor";
 
 const SITE_COLUMNS = [
     { name: "site_id", title: "Site Id" },
@@ -28,13 +29,34 @@ const COLUMN_EXTENSIONS = [
 
 export default function Sites() {
     const [sites, setSites] = useState([]);
+    const [siteToDelete, setSiteToDelete] = useState(undefined);
+
+    const refreshSites = useCallback(
+        () => {
+            getSites()
+            .then((sites) => {
+                setSites(sites);
+            });
+        }, []
+    );
 
     useEffect(() => {
-        getSites()
-        .then((sites) => {
-            setSites(sites);
+        refreshSites();
+    }, [refreshSites]);
+
+    const onDeleteClicked = (site_id) => {
+        console.log("Delete site clicked.", site_id);
+        const site = sites.find(site => site.site_id === site_id);
+        setSiteToDelete(site);
+    };
+
+    const onDeleteConfirmed = () => {
+        deleteSite(siteToDelete.site_id).then(() => {
+            console.log("On delete success: refreshing sites page.");
+            refreshSites();
         });
-    },[]);
+        setSiteToDelete(undefined);
+    }
 
     return(
         <div>
@@ -46,7 +68,16 @@ export default function Sites() {
                 defaultSorting={DEFAULT_SORTING}
                 //onAddClicked={onAddClicked}
                 //onEditClicked={onEditClicked}
-                //onDeleteClicked={onDeleteClicked}
+                onDeleteClicked={onDeleteClicked}
+            />
+            <Popup
+                show={!!siteToDelete}
+                title="Delete Confirmation"
+                body={"Are you sure you want to delete "
+                        + siteToDelete?.item_name + "?"}
+                onHide={() => {setSiteToDelete(undefined);}}
+                onSubmit={onDeleteConfirmed}
+                submitText="Yes"
             />
         </div>
     );

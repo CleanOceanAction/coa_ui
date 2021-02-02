@@ -1,4 +1,4 @@
-import { getData } from "../../BackendAccessor.js";
+import { getData, postData } from "../../BackendAccessor.js";
 
 export function getEventItems(event_id) {
     return getData("event-items?event_id=" + event_id) 
@@ -10,4 +10,14 @@ export function getEventItems(event_id) {
     .catch(() => {
         console.log("Failed to retrieve event items for event id: " + event_id);
     });
+}
+
+export function deleteEventItem(record_id) {
+    const request = {
+        "record_id": record_id
+    };
+    return postData('event-items/remove', request)
+        .then((response) => {
+            return response.json();
+        });
 }

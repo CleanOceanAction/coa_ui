@@ -6,7 +6,7 @@ import Popup from "../../components/Popup.js";
 import { postData } from "../../BackendAccessor.js";
 import { userContext } from "../UserContext";
 
-export default function EventPopup({show, onHide, onEventChange, year, season, selectedEvent}) {
+export default function EventPopup({show, onHide, onChange, year, season, selectedEvent}) {
     const [submitDisabled, setSubmitDisabled] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
     const [siteId, setSiteId] = useState(undefined);
@@ -22,13 +22,13 @@ export default function EventPopup({show, onHide, onEventChange, year, season, s
         console.log("onSubmit");
         if (selectedEvent) {
             updateEvent().then(() => {
-                onEventChange();
+                onChange();
             });
             onClose();
         }
         else {
             addEvent().then(() => {
-                onEventChange();
+                onChange();
             });
             setSiteId(undefined);
             clearEventDetails();

@@ -4,8 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import DataGrid from "../../components/DataGrid";
 import EventPopup from "./EventPopup";
-import { getEvents, deleteEvent } from "./EventAccessor.js";
-import { getSites } from "../sites/SiteAccessor.js";
+import EventItems from "../event-items/EventItems";
+import Popup from "../../components/Popup";
+import { getEvents, deleteEvent } from "./EventAccessor";
+import { getSites } from "../sites/SiteAccessor";
 
 
 const EVENT_COLUMNS = [
@@ -38,7 +40,9 @@ export default function Events() {
     const [season, setSeason] = useState(new Date().getMonth() > 5 ? "Fall" : "Spring");
     const [siteMap, setSiteMap] = useState({});
     const [events, setEvents] = useState([]);
+    const [eventToDelete, setEventToDelete] = useState(undefined);
     const [selectedEditEvent, setSelectedEditEvent] = useState(undefined);
+    const [selectedDrillDownEvent, setSelectedDrillDownEvent] = useState(undefined);
     const [showPopup, setShowPopup] = useState(false);
 
     const onAddClicked = () => {
@@ -57,23 +61,28 @@ export default function Events() {
 
     const onDeleteClicked = (event_id) => {
         console.log("Delete event clicked.", event_id);
-        deleteEvent(event_id).then(() => {
+        const event = events.find(event => event.event_id === event_id);
+        setEventToDelete(event);
+    };
+
+    const onDeleteConfirmed = () => {
+        deleteEvent(eventToDelete.event_id).then(() => {
             console.log("On delete success: refreshing events page.");
             refreshEvents();
         });
-    };
+        setEventToDelete(undefined);
+    }
 
     const onRowSelected = (event_id) => {
         console.log("Row selected.", event_id);
         const event = events.find(event => event.event_id === event_id);
-        // TODO: drill down to event items page
+        setSelectedDrillDownEvent(event);
     };
 
     const refreshEvents = useCallback(
         () => {
             getEvents(year, season)
             .then((responseEvents) => {
-                console.log("events response", responseEvents);
                 const eventList = [];
                 responseEvents.forEach((event) => {
                     const site = siteMap[event["site_id"]];
@@ -107,44 +116,66 @@ export default function Events() {
 
     return(
         <div>
-            Year<br/>
-            <input
-                name="year"
-                type="number"
-                min="1900"
-                max="9999"
-                step="1"
-                placeholder="Year"
-                value={year}
-                onChange={(event) => setYear(event.target.value)}
-                required
-            /><br/>
-            Season<br/>
-            <select
-                value={season}
-                onChange={(event) => setSeason(event.target.value)}>
-                <option value="Spring">Spring</option>
-                <option value="Fall">Fall</option>
-            </select><br/>
-            <DataGrid
-                rows={events}
-                columns={EVENT_COLUMNS}
-                columnExtensions={COLUMN_EXTENSIONS}
-                rowIdPropertyName="event_id"
-                defaultSorting={DEFAULT_SORTING}
-                onAddClicked={onAddClicked}
-                onEditClicked={onEditClicked}
-                onDeleteClicked={onDeleteClicked}
-                onRowSelected={onRowSelected}
-            />
-            <EventPopup
-                year={year}
-                season={season}
-                show={showPopup}
-                selectedEvent={selectedEditEvent}
-                onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
-                onEventChange={refreshEvents}
-            />
+            {!selectedDrillDownEvent
+            ?
+            <div>
+                Year<br/>
+                <input
+                    name="year"
+                    type="number"
+                    min="1900"
+                    max="9999"
+                    step="1"
+                    placeholder="Year"
+                    value={year}
+                    onChange={(event) => setYear(event.target.value)}
+                    required
+                /><br/>
+                Season<br/>
+                <select
+                    value={season}
+                    onChange={(event) => setSeason(event.target.value)}>
+                    <option value="Spring">Spring</option>
+                    <option value="Fall">Fall</option>
+                </select><br/>
+                <DataGrid
+                    rows={events}
+                    columns={EVENT_COLUMNS}
+                    columnExtensions={COLUMN_EXTENSIONS}
+                    rowIdPropertyName="event_id"
+                    defaultSorting={DEFAULT_SORTING}
+                    onAddClicked={onAddClicked}
+                    onEditClicked={onEditClicked}
+                    onDeleteClicked={onDeleteClicked}
+                    onRowSelected={onRowSelected}
+                />
+                <EventPopup
+                    year={year}
+                    season={season}
+                    show={showPopup}
+                    selectedEvent={selectedEditEvent}
+                    onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
+                    onChange={refreshEvents}
+                />
+                <Popup
+                    show={!!eventToDelete}
+                    title="Delete Confirmation"
+                    body={"Are you sure you want to delete the event at "
+                            + eventToDelete?.site_name + "?"}
+                    onHide={() => {setEventToDelete(undefined);}}
+                    onSubmit={onDeleteConfirmed}
+                    submitText="Yes"
+                />
+            </div>
+            :
+            <div>
+                <EventItems
+                    year={year}
+                    season={season}
+                    event={selectedDrillDownEvent}
+                    onReturn={() => {setSelectedDrillDownEvent(undefined);}}
+                />
+            </div>}
         </div>
     );
 }

@@ -92,7 +92,15 @@ export default function DataGrid({
             {onRowSelected ? <IntegratedSelection /> : null}
             
             <IntegratedSorting />
-            <Table columnExtensions={columnExtensions} />
+            <Table
+                tableComponent={({ ...restProps }) => (
+                    <Table.Table
+                      {...restProps}
+                      className={"table-striped" + (onRowSelected ? " select-style" : "")}
+                    />
+                )}
+                columnExtensions={columnExtensions}
+            />
             <TableColumnVisibility
                 defaultHiddenColumnNames={defaultHiddenColumnNames ?
                     defaultHiddenColumnNames : rowIdPropertyName}
