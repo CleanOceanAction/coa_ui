@@ -1,8 +1,9 @@
 import './Items.css';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import DataGrid from "../../components/DataGrid";
-import { getItems } from "./ItemAccessor.js";
+import Popup from "../../components/Popup"
+import { getItems, deleteItem } from "./ItemAccessor.js";
 
 const ITEM_COLUMNS = [
     { name: "item_id", title: "Item Id" },
@@ -19,13 +20,34 @@ const DEFAULT_SORTING = [
 
 export default function Items() {
     const [items, setItems] = useState([]);
+    const [itemToDelete, setItemToDelete] = useState(undefined);
+
+    const refreshItems = useCallback(
+        () => {
+            getItems()
+            .then((itemList) => {
+                setItems(itemList);
+            });
+        }, []
+    );
 
     useEffect(() => {
-        getItems()
-        .then((itemList) => {
-            setItems(itemList);
+        refreshItems();
+    }, [refreshItems]);
+
+    const onDeleteClicked = (item_id) => {
+        console.log("Delete item clicked.", item_id);
+        const item = items.find(item => item.item_id === item_id);
+        setItemToDelete(item);
+    };
+
+    const onDeleteConfirmed = () => {
+        deleteItem(itemToDelete.item_id).then(() => {
+            console.log("On delete success: refreshing items page.");
+            refreshItems();
         });
-    },[]);
+        setItemToDelete(undefined);
+    }
 
     return(
         <div>
@@ -34,6 +56,16 @@ export default function Items() {
                 rows={items}
                 rowIdPropertyName="item_id"
                 defaultSorting={DEFAULT_SORTING}
+                onDeleteClicked={onDeleteClicked}
+            />
+            <Popup
+                show={!!itemToDelete}
+                title="Delete Confirmation"
+                body={"Are you sure you want to delete "
+                        + itemToDelete?.item_name + "?"}
+                onHide={() => {setItemToDelete(undefined);}}
+                onSubmit={onDeleteConfirmed}
+                submitText="Yes"
             />
         </div>
     );

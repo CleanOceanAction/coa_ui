@@ -24,7 +24,7 @@ import {
 
 export default function DataGrid({
     columns, columnExtensions, rows, rowIdPropertyName,
-    defaultSorting,
+    defaultHiddenColumnNames, defaultSorting,
     onAddClicked, onEditClicked, onDeleteClicked, onRowSelected}) {
 
     const [addedRows, setAddedRows] = useState([]);
@@ -60,10 +60,10 @@ export default function DataGrid({
     const selectionChanged = (selection) => {
         console.log(selection);
         const selectedId = selection[selection.length - 1];
-        setSelection([selectedId]);
         if (onRowSelected) {
             onRowSelected(selectedId);
         }
+        setSelection([]);
     };
 
     return(
@@ -92,9 +92,18 @@ export default function DataGrid({
             {onRowSelected ? <IntegratedSelection /> : null}
             
             <IntegratedSorting />
-            <Table columnExtensions={columnExtensions} />
+            <Table
+                tableComponent={({ ...restProps }) => (
+                    <Table.Table
+                      {...restProps}
+                      className={"table-striped" + (onRowSelected ? " select-style" : "")}
+                    />
+                )}
+                columnExtensions={columnExtensions}
+            />
             <TableColumnVisibility
-                defaultHiddenColumnNames={rowIdPropertyName}
+                defaultHiddenColumnNames={defaultHiddenColumnNames ?
+                    defaultHiddenColumnNames : rowIdPropertyName}
             />
             <TableHeaderRow showSortingControls />
             <TableFilterRow />
