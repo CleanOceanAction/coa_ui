@@ -5,32 +5,36 @@ import React from "react";
 import PositiveFloatInput from "../../components/PositiveFloatInput.js";
 import PositiveIntegerInput from "../../components/PositiveIntegerInput.js";
 
-export default function EventDetails({event, setNumVolunteers, setNumTrashBags, setTrashWeight, setWalkingDistance}) {
+export default function EventDetails({
+        numVolunteers, setNumVolunteers,
+        numTrashBags, setNumTrashBags,
+        trashWeight, setTrashWeight,
+        walkingDistance, setWalkingDistance}) {
 
     return(
         <div>
             <PositiveIntegerInput
                 name="Volunteers"
                 placeholder="Number of Volunteers"
-                value={event?.volunteer_cnt}
+                value={numVolunteers}
                 onChanged={setNumVolunteers}
             />
             <PositiveIntegerInput
                 name="Trash Bags"
                 placeholder="Number of Trash Bags"
-                value={event?.trashbag_cnt}
+                value={numTrashBags}
                 onChanged={setNumTrashBags}
             />
            <PositiveFloatInput
                 name="Trash Weight (lbs)"
                 placeholder="Trash Weight (lbs)"
-                value={event?.trash_weight}
+                value={trashWeight}
                 onChanged={setTrashWeight}
             />
             <PositiveFloatInput
                 name="Walking Distance (mi)"
                 placeholder="Walking Distance (mi)"
-                value={event?.walking_distance}
+                value={walkingDistance}
                 onChanged={setWalkingDistance}
             />
         </div>

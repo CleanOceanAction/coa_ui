@@ -3,7 +3,7 @@ import "./NumberInput.css";
 import React, { useEffect, useState } from "react";
 
 export default function NumberInput({name, pattern, placeholder, value, onChanged, parse}) {
-    const [inputValue, setInputValue] = useState(null);
+    const [inputValue, setInputValue] = useState("");
 
     const getValidNumber = (val) => {
         const parsedValue = parse(val);
@@ -18,6 +18,7 @@ export default function NumberInput({name, pattern, placeholder, value, onChange
     };
 
     const inputChanged = (e) => {
+        e.preventDefault();
         if (e.target.validity.valid || e.target.value === "") {
             setInputValue(e.target.value);
             onChanged(getValidNumber(e.target.value));
