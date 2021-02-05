@@ -19,7 +19,9 @@ const EVENT_COLUMNS = [
     { name: "volunteer_cnt", title: "# of Volunteers" },
     { name: "trashbag_cnt", title: "# of Trashbags" },
     { name: "trash_weight", title: "Trash Wgt (lbs)" },
-    { name: "walking_distance", title: "Est. Distance (mi)" }
+    { name: "walking_distance", title: "Est. Distance (mi)" },
+    { name: "updated_by", title: "Updated By" },
+    { name: "updated_tsp", title: "Updated Time" },
 ];
 
 const COLUMN_EXTENSIONS = [

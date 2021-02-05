@@ -16,6 +16,7 @@ const EVENT_ITEM_COLUMNS = [
     { name: "item_name", title: "Item Name" },
     { name: "quantity", title: "Quantity" },
     { name: "updated_by", title: "Updated By" },
+    { name: "updated_tsp", title: "Updated Time" },
 ];
 
 const DEFAULT_SORTING = [
