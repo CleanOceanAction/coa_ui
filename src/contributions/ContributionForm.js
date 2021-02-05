@@ -18,7 +18,6 @@ export default function ContributionForm() {
 
     return(
         <div>
-            <h3>Please enter your contribution!</h3>
             <div className="name">{userState.name}</div>
             <button
                 onClick={onLogout}>
@@ -43,4 +42,3 @@ export default function ContributionForm() {
         </div>
     );
 }
-  
