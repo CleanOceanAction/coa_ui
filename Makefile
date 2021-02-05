@@ -1,3 +1,5 @@
+PACKAGES = node_modules
+
 .PHONY: help
 help:
 	@echo "Usage:"
@@ -10,16 +12,18 @@ help:
 	@echo "    clean:        Clean out temporaries"
 	@echo ""
 
-.PHONY: install-deps
-install-deps:
+$(PACKAGES):
 	npm install
 
+.PHONY: install-deps
+install-deps: $(PACKAGES)
+
 .PHONY: run
-run:
+run: $(PACKAGES)
 	npm start
 
 .PHONY: build
-build:
+build: $(PACKAGES)
 	npm run build
 
 .PHONY: prod-build
