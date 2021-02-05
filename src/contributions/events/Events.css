@@ -1,0 +1,5 @@
+#selectionRow {
+    column-gap: 5px;
+    display:inline-flex;
+    padding: 5px;
+}

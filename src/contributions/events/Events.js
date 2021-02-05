@@ -119,25 +119,28 @@ export default function Events() {
             {!selectedDrillDownEvent
             ?
             <div>
-                Year<br/>
-                <input
-                    name="year"
-                    type="number"
-                    min="1900"
-                    max="9999"
-                    step="1"
-                    placeholder="Year"
-                    value={year}
-                    onChange={(event) => setYear(event.target.value)}
-                    required
-                /><br/>
-                Season<br/>
-                <select
-                    value={season}
-                    onChange={(event) => setSeason(event.target.value)}>
-                    <option value="Spring">Spring</option>
-                    <option value="Fall">Fall</option>
-                </select><br/>
+                <div id="selectionRow">
+                    <div>Year</div>
+                    <input
+                        name="year"
+                        type="number"
+                        min="1900"
+                        max="9999"
+                        step="1"
+                        placeholder="Year"
+                        value={year}
+                        onChange={(event) => setYear(event.target.value)}
+                        required
+                    />
+                    <div>Season</div>
+                    <select
+                        value={season}
+                        onChange={(event) => setSeason(event.target.value)}>
+                        <option value="Spring">Spring</option>
+                        <option value="Fall">Fall</option>
+                    </select>
+                </div>
+                <br/>
                 <DataGrid
                     rows={events}
                     columns={EVENT_COLUMNS}
