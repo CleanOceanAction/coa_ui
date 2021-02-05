@@ -110,7 +110,7 @@ export default function EventItemPopup({show, onHide, onChange, year, season, ev
                         setItemId={setItemId}
                     />
                     <PositiveIntegerInput
-                        name="Quantity"
+                        name="Quantity*"
                         placeholder="Number of Items"
                         value={quantity}
                         onChanged={setQuantity}
