@@ -19,7 +19,7 @@ export default function EventDetails({
                 value={numVolunteers}
                 onChanged={setNumVolunteers}
             />
-            <PositiveIntegerInput
+            <PositiveFloatInput
                 name="Trash Bags"
                 placeholder="Number of Trash Bags"
                 value={numTrashBags}
