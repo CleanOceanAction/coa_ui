@@ -19,6 +19,10 @@ const EVENT_ITEM_COLUMNS = [
     { name: "updated_tsp", title: "Updated Time" },
 ];
 
+const EVENT_ITEM_TOTALS = [
+    "quantity",
+];
+
 const DEFAULT_SORTING = [
     { columnName: "material", direction: "asc" },
     { columnName: "category", direction: "asc" },
@@ -118,6 +122,7 @@ export default function EventItems({event, year, season, onReturn}) {
                 onAddClicked={onAddClicked}
                 onEditClicked={onEditClicked}
                 onDeleteClicked={onDeleteClicked}
+                totals={EVENT_ITEM_TOTALS}
             />
             <EventItemPopup
                 year={year}
