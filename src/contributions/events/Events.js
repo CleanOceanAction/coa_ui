@@ -178,7 +178,10 @@ export default function Events() {
                     year={year}
                     season={season}
                     event={selectedDrillDownEvent}
-                    onReturn={() => {setSelectedDrillDownEvent(undefined);}}
+                    onReturn={() => {
+                            setSelectedDrillDownEvent(undefined);
+                            refreshEvents();
+                    }}
                 />
             </div>}
         </div>
