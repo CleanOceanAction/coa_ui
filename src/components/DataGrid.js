@@ -1,6 +1,7 @@
 import "./DataGrid.css";
 
 import React, { useState } from 'react';
+import { FaPen, FaTrash } from "react-icons/fa";
 
 import {
     EditingState,
@@ -21,6 +22,12 @@ import {
     TableFilterRow,
     TableSelection,
 } from '@devexpress/dx-react-grid-bootstrap3';
+
+const editColumnMessages = {
+  editCommand: FaPen,
+  deleteCommand: FaTrash,
+};
+
 
 export default function DataGrid({
     columns, columnExtensions, rows, rowIdPropertyName,
@@ -113,6 +120,7 @@ export default function DataGrid({
                 showAddCommand={!!onAddClicked}
                 showEditCommand={!!onEditClicked}
                 showDeleteCommand={!!onDeleteClicked}
+                messages={editColumnMessages}
             /> : null}
             {onRowSelected ? <TableSelection
                 highlightRow
