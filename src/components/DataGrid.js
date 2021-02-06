@@ -9,8 +9,10 @@ import {
     IntegratedFiltering,
     IntegratedSelection,
     IntegratedSorting,
+    IntegratedSummary,
     SelectionState,
     SortingState,
+    SummaryState,
     TableColumnVisibility,
 } from '@devexpress/dx-react-grid';
 import {
@@ -21,6 +23,7 @@ import {
     TableHeaderRow,
     TableFilterRow,
     TableSelection,
+    TableSummaryRow,
 } from '@devexpress/dx-react-grid-bootstrap3';
 
 const editColumnMessages = {
@@ -29,15 +32,15 @@ const editColumnMessages = {
     deleteCommand: FaTrash,
 };
 
-
 export default function DataGrid({
     columns, columnExtensions, rows, rowIdPropertyName,
     defaultHiddenColumnNames, defaultSorting,
-    onAddClicked, onEditClicked, onDeleteClicked, onRowSelected}) {
+    onAddClicked, onEditClicked, onDeleteClicked, onRowSelected, totals=[]}) {
 
     const [addedRows, setAddedRows] = useState([]);
     const [editingRowIds] = useState([]);
     const [selection, setSelection] = useState([]);
+    const [totalSummaryItems] = useState(totals.map(col => ({ columnName: col, type: "sum" })));
 
     const getRowId = (row) => row[rowIdPropertyName];
 
@@ -81,7 +84,6 @@ export default function DataGrid({
             getRowId={getRowId}
         >
             <FilteringState defaultFilters={[]} />
-            <IntegratedFiltering />
             <EditingState
                 addedRows={addedRows}
                 onAddedRowsChange={addedRowsChange}
@@ -98,8 +100,14 @@ export default function DataGrid({
                 onSelectionChange={selectionChanged}
             /> :null}
             {onRowSelected ? <IntegratedSelection /> : null}
-            
+            <SummaryState
+                totalItems={totalSummaryItems}
+            />
+
+            <IntegratedFiltering />
             <IntegratedSorting />
+            <IntegratedSummary />
+
             <Table
                 tableComponent={({ ...restProps }) => (
                     <Table.Table
@@ -128,6 +136,7 @@ export default function DataGrid({
                 selectByRowClick
                 showSelectionColumn={false}
             /> : null}
+            <TableSummaryRow />
         </Grid>
     );
 }

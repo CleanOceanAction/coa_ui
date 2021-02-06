@@ -24,6 +24,14 @@ const EVENT_COLUMNS = [
     { name: "updated_tsp", title: "Updated Time" },
 ];
 
+const EVENT_TOTALS = [
+    "trash_items_cnt",
+    "volunteer_cnt",
+    "trashbag_cnt",
+    "trash_weight",
+    "walking_distance",
+];
+
 const COLUMN_EXTENSIONS = [
     { columnName: "county", width: 110 },
     { columnName: "town", width: 180 },
@@ -153,6 +161,7 @@ export default function Events() {
                     onEditClicked={onEditClicked}
                     onDeleteClicked={onDeleteClicked}
                     onRowSelected={onRowSelected}
+                    totals={EVENT_TOTALS}
                 />
                 <EventPopup
                     year={year}
