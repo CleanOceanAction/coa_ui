@@ -1,7 +1,7 @@
 import "./DataGrid.css";
 
 import React, { useState } from 'react';
-import { FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaPlusSquare, FaTrash } from "react-icons/fa";
 
 import {
     EditingState,
@@ -24,8 +24,9 @@ import {
 } from '@devexpress/dx-react-grid-bootstrap3';
 
 const editColumnMessages = {
-  editCommand: FaPen,
-  deleteCommand: FaTrash,
+    addCommand: FaPlusSquare,
+    editCommand: FaPen,
+    deleteCommand: FaTrash,
 };
 
 
