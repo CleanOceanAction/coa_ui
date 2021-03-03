@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 import ItemSelector from "../items/ItemSelector";
-import Popup from "../../components/Popup";
+import { Popup, PopupWarning } from "../../components/Popup";
 import PositiveIntegerInput from "../../components/PositiveIntegerInput";
 import { postData } from "../../BackendAccessor";
 import { userContext } from "../UserContext";
@@ -14,19 +14,24 @@ export default function EventItemPopup({show, onHide, onChange, year, season, ev
     const {userState} = useContext(userContext);
     const [warning, setWarning] = useState("");
 
-    const onSubmit = () => {
+    const onSubmit = (isDone) => {
         console.log("onSubmit");
         if (selectedEventItem) {
             updateEventItem().then(() => {
                 onChange();
             });
-            onClose();
+            if (isDone) {
+                onClose();
+            }
         }
         else {
             addEventItem()
             .then((isSuccessful) => {
                 if (isSuccessful) {
                     onChange();
+                    if (isDone) {
+                        onClose();
+                    }
                 }
             });
             setItemId(undefined);
@@ -41,7 +46,7 @@ export default function EventItemPopup({show, onHide, onChange, year, season, ev
 
     const addEventItem = () => {
         const existingEventItem = eventItems.find(eventItem => eventItem["item_id"].toString() === itemId.toString());
-        console.log("AddEventItem", eventItems, itemId, existingEventItem);
+        console.log("AddEventItem", itemId, existingEventItem);
         if (existingEventItem) {
             setWarning("Item already added to this event.");
             return Promise.resolve(false);
@@ -123,12 +128,10 @@ export default function EventItemPopup({show, onHide, onChange, year, season, ev
             defaultAddAnother
             onSubmit={onSubmit}
         />
-        <Popup
+        <PopupWarning
             show={show && !!warning}
-            title="Warning"
-            body={warning}
+            warning={warning}
             onHide={() => {setWarning("");}}
-            showSubmit={false}
         />
         </div>
     );

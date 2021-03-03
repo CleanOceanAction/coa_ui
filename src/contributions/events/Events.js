@@ -167,6 +167,7 @@ export default function Events() {
                     year={year}
                     season={season}
                     show={showPopup}
+                    events={events}
                     selectedEvent={selectedEditEvent}
                     onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
                     onChange={refreshEvents}
