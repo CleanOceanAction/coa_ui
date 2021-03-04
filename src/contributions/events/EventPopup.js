@@ -130,7 +130,6 @@ export default function EventPopup({show, onHide, onChange, year, season, events
             title={(selectedEvent ? "Update" : "Add") + " Event for " + year + " " + season}
             body={
                 <div>
-                    <h4>Location</h4>
                     <SiteSelector
                         isDisabled={isUpdate}
                         siteId={siteId}
