@@ -9,7 +9,7 @@ const sortByLabel = (lhs, rhs) => {
     return (LHS < RHS) ? -1 : ((LHS > RHS) ? 1 : 0);
 };
 
-export default function ThreeTierSelect({isDisabled, allOptions,
+export default function ThreeTierSelect({isDisabled, title, allOptions,
         tier1Title, tier1Prop, tier2Title, tier2Prop, tier3Title, tier3Prop, idProp,
         selectedId, setSelectedId}) {
     const [selection, setSelection] = useState({
@@ -126,34 +126,37 @@ export default function ThreeTierSelect({isDisabled, allOptions,
     }, [allOptions, selection, tier1Prop, tier2Prop, tier3Prop, idProp]);
 
     return(
-        <div className="selections">
-            {tier1Title}<Select
-                bsStyle="default"
-                className="select"
-                isClearable
-                isDisabled={isDisabled}
-                value={selection.tier1}
-                options={tier1Options}
-                onChange={(selection) => setTier1(selection)}>
-            </Select>
-            {tier2Title}<Select
-                bsStyle="default"
-                className="select"
-                isClearable
-                isDisabled={isDisabled}
-                value={selection.tier2}
-                options={tier2Options}
-                onChange={(selection) => setTier2(selection)}>
-            </Select>
-            {tier3Title}<Select
-                bsStyle="default"
-                className="select"
-                isClearable
-                isDisabled={isDisabled}
-                value={selection.tier3}
-                options={tier3Options}
-                onChange={(selection) => setTier3(selection)}>
-            </Select>
+        <div>
+            <h4>{title}</h4>
+            <div className="selections">
+                {tier1Title}<Select
+                    bsStyle="default"
+                    className="select"
+                    isClearable
+                    isDisabled={isDisabled}
+                    value={selection.tier1}
+                    options={tier1Options}
+                    onChange={(selection) => setTier1(selection)}>
+                </Select>
+                {tier2Title}<Select
+                    bsStyle="default"
+                    className="select"
+                    isClearable
+                    isDisabled={isDisabled}
+                    value={selection.tier2}
+                    options={tier2Options}
+                    onChange={(selection) => setTier2(selection)}>
+                </Select>
+                {tier3Title}<Select
+                    bsStyle="default"
+                    className="select"
+                    isClearable
+                    isDisabled={isDisabled}
+                    value={selection.tier3}
+                    options={tier3Options}
+                    onChange={(selection) => setTier3(selection)}>
+                </Select>
+            </div>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import ThreeTierSelect from "../ThreeTierSelect.js";
 import { getSites } from "./SiteAccessor"
-export default function SiteSelector({isDisabled, siteId, setSiteId}) {
+export default function SiteSelector({isDisabled, title="Location", siteId, setSiteId}) {
     const [allSites, setAllSites] = useState([]);
     
     useEffect(() => {
@@ -16,6 +16,7 @@ export default function SiteSelector({isDisabled, siteId, setSiteId}) {
     return(
         <ThreeTierSelect
             isDisabled={isDisabled}
+            title={title}
             allOptions={allSites}
             tier1Title="County*"
             tier1Prop="county"

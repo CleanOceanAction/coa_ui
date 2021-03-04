@@ -108,7 +108,6 @@ export default function EventItemPopup({show, onHide, onChange, year, season, ev
                     + " at " + event?.site_name}
             body={
                 <div>
-                    <h4>Item</h4>
                     <ItemSelector
                         isDisabled={!!selectedEventItem}
                         itemId={itemId}
