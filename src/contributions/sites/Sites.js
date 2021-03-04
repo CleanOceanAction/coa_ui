@@ -1,7 +1,8 @@
-import './Sites.css';
+import "./Sites.css";
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import DataGrid from "../../components/DataGrid";
+import SitePopup from "./SitePopup"
 import Popup from "../../components/Popup";
 import { getSites, deleteSite } from "./SiteAccessor";
 
@@ -29,6 +30,8 @@ const COLUMN_EXTENSIONS = [
 
 export default function Sites() {
     const [sites, setSites] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedSite, setSelectedSite] = useState(undefined);
     const [siteToDelete, setSiteToDelete] = useState(undefined);
 
     const refreshSites = useCallback(
@@ -43,6 +46,20 @@ export default function Sites() {
     useEffect(() => {
         refreshSites();
     }, [refreshSites]);
+
+    const onAddClicked = () => {
+        console.log("Add site clicked.");
+        setShowPopup(true);
+    };
+
+    const onEditClicked = (site_id) => {
+        console.log("Edit site clicked.", site_id);
+        const site = sites.find(site => site.site_id === site_id);
+        if (site) {
+            setSelectedSite(site);
+            setShowPopup(true);
+        }
+    };
 
     const onDeleteClicked = (site_id) => {
         console.log("Delete site clicked.", site_id);
@@ -66,15 +83,22 @@ export default function Sites() {
                 rowIdPropertyName="site_id"
                 columnExtensions={COLUMN_EXTENSIONS}
                 defaultSorting={DEFAULT_SORTING}
-                //onAddClicked={onAddClicked}
-                //onEditClicked={onEditClicked}
+                onAddClicked={onAddClicked}
+                onEditClicked={onEditClicked}
                 onDeleteClicked={onDeleteClicked}
+            />
+            <SitePopup
+                show={showPopup}
+                sites={sites}
+                selectedSite={selectedSite}
+                onHide={() => {setShowPopup(false); setSelectedSite(undefined);}}
+                onChange={refreshSites}
             />
             <Popup
                 show={!!siteToDelete}
                 title="Delete Confirmation"
                 body={"Are you sure you want to delete "
-                        + siteToDelete?.item_name + "?"}
+                        + siteToDelete?.site_name + "?"}
                 onHide={() => {setSiteToDelete(undefined);}}
                 onSubmit={onDeleteConfirmed}
                 submitText="Yes"
