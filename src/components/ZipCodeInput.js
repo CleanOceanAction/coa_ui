@@ -22,7 +22,7 @@ export default function ZipCodeInput({name, placeholder, value, onChanged}) {
             <input
                 name={name.split(" ").join("_").toLowerCase()}
                 type="tel"
-                pattern="[0-9-]*"
+                pattern="^(\d{5}(?:\-\d{4})?)$"
                 placeholder={placeholder}
                 value={inputValue}
                 onChange={inputChanged}
