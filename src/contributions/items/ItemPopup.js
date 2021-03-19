@@ -119,21 +119,21 @@ export default function ItemPopup({
                     + " Item "}
             body={
                 <div>
-                    Material
+                    Material*
                     <SelectCustom
                         optionList={items}
                         property={"material"}
                         value={material}
                         setValue={setMaterial}
                     />
-                    Category
+                    Category*
                     <SelectCustom
                         optionList={items}
                         property={"category"}
                         value={category}
                         setValue={setCategory}
                     />
-                    Item Name
+                    Item Name*
                     <SelectCustom
                         optionList={items}
                         property={"item_name"}
