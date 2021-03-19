@@ -135,21 +135,21 @@ export default function SitePopup({
                     + " Site "}
             body={
                 <div>
-                    County
+                    County*
                     <SelectCustom
                         optionList={sites}
                         property={"county"}
                         value={county}
                         setValue={setCounty}
                     />
-                    Town
+                    Town*
                     <SelectCustom
                         optionList={sites}
                         property={"town"}
                         value={town}
                         setValue={setTown}
                     />
-                    Site Name
+                    Site Name*
                     <SelectCustom
                         optionList={sites}
                         property={"site_name"}
