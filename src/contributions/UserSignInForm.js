@@ -1,6 +1,7 @@
 import './UserSignInForm.css';
 
 import React, { useContext, useEffect, useState } from 'react';
+
 import { PopupWarning } from "../components/Popup";
 import { postData } from "../BackendAccessor.js";
 import { userContext } from "./UserContext";
@@ -67,7 +68,7 @@ export default function UserSignInForm(props) {
             <PopupWarning
                 show={!!warning}
                 warning={warning}
-                onHide={() => {setWarning("");}}
+                onHide={() => setWarning("")}
             />
         </div>
     );
