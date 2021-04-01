@@ -9,10 +9,10 @@ export default function ContributionsAccess() {
     const {userState} = useContext(userContext);
     return(
         <div>
-            <div className={userState.name ? "invisible" : ""}>
+            <div className={userState.name && userState.token ? "invisible" : ""}>
                 <UserSignInForm/>
             </div>
-            <div className={userState.name ? "" : "invisible"}>
+            <div className={userState.name && userState.token ? "" : "invisible"}>
                 <ContributionForm />
             </div>
         </div>

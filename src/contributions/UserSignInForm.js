@@ -1,6 +1,7 @@
 import './UserSignInForm.css';
 
 import React, { useState, useContext } from 'react';
+import { PopupWarning } from "../components/Popup";
 import { postData } from "../BackendAccessor.js";
 import { userContext } from "./UserContext";
 
@@ -9,12 +10,14 @@ export default function UserSignInForm(props) {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [warning, setWarning] = useState("");
 
     const attemptLogIn = () => {
-        const contextObj = {
-            "name": name
-        };
-        setUserState(contextObj);
+        if (!username || !password || !name) {
+            setWarning("Please enter all log-in information.");
+            return;
+        }
+
         postData('login', {"username": username, "password": password})
             .then((response) => {
                 response.json().then((data) => {
@@ -32,6 +35,7 @@ export default function UserSignInForm(props) {
     };
 
     return(
+        <div>
         <form>
             <input
                 name="name"
@@ -58,6 +62,12 @@ export default function UserSignInForm(props) {
             <br/><br/>
             <input type="submit" value="Enter" onClick={onSubmit}/>
         </form>
+        <PopupWarning
+            show={!!warning}
+            warning={warning}
+            onHide={() => {setWarning("");}}
+        />
+        </div>
     );
 }
   
