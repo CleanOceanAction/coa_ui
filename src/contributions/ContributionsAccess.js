@@ -1,6 +1,6 @@
-import './ContributionsAccess.css';
+import "./ContributionsAccess.css";
 
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import ContributionForm from "./ContributionForm";
 import UserSignInForm from "./UserSignInForm";
 import { userContext } from "./UserContext";
@@ -18,4 +18,3 @@ export default function ContributionsAccess() {
         </div>
     );
 }
-  

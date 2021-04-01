@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap'
+import "./HeaderNavigation.css"
 
+import React, { Component } from "react";
+import { Navbar, Nav, NavItem } from "react-bootstrap"
 import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 import Routes from "./Routes";
-
-import "./HeaderNavigation.css"
 
 class HeaderNavigation extends Component {
   render() {
@@ -21,14 +20,14 @@ class HeaderNavigation extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/map">
-              <NavItem>Map</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/contributions">
-              <NavItem>Contribution</NavItem>
+            <LinkContainer to="/visualizations">
+              <NavItem>Visualizations</NavItem>
             </LinkContainer>
             <LinkContainer to="/about">
               <NavItem>About</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/contributions">
+              <NavItem>Contribution</NavItem>
             </LinkContainer>
           </Nav>
           </Navbar.Collapse>
