@@ -19,7 +19,17 @@ const EVENT_COLUMNS = [
     { name: "volunteer_cnt", title: "# of Volunteers" },
     { name: "trashbag_cnt", title: "# of Trashbags" },
     { name: "trash_weight", title: "Trash Wgt (lbs)" },
-    { name: "walking_distance", title: "Est. Distance (mi)" }
+    { name: "walking_distance", title: "Est. Distance (mi)" },
+    { name: "updated_by", title: "Updated By" },
+    { name: "updated_tsp", title: "Updated Time" },
+];
+
+const EVENT_TOTALS = [
+    "trash_items_cnt",
+    "volunteer_cnt",
+    "trashbag_cnt",
+    "trash_weight",
+    "walking_distance",
 ];
 
 const COLUMN_EXTENSIONS = [
@@ -119,25 +129,28 @@ export default function Events() {
             {!selectedDrillDownEvent
             ?
             <div>
-                Year<br/>
-                <input
-                    name="year"
-                    type="number"
-                    min="1900"
-                    max="9999"
-                    step="1"
-                    placeholder="Year"
-                    value={year}
-                    onChange={(event) => setYear(event.target.value)}
-                    required
-                /><br/>
-                Season<br/>
-                <select
-                    value={season}
-                    onChange={(event) => setSeason(event.target.value)}>
-                    <option value="Spring">Spring</option>
-                    <option value="Fall">Fall</option>
-                </select><br/>
+                <div id="selectionRow">
+                    <div>Year</div>
+                    <input
+                        name="year"
+                        type="number"
+                        min="1900"
+                        max="9999"
+                        step="1"
+                        placeholder="Year"
+                        value={year}
+                        onChange={(event) => setYear(event.target.value)}
+                        required
+                    />
+                    <div>Season</div>
+                    <select
+                        value={season}
+                        onChange={(event) => setSeason(event.target.value)}>
+                        <option value="Spring">Spring</option>
+                        <option value="Fall">Fall</option>
+                    </select>
+                </div>
+                <br/>
                 <DataGrid
                     rows={events}
                     columns={EVENT_COLUMNS}
@@ -148,11 +161,13 @@ export default function Events() {
                     onEditClicked={onEditClicked}
                     onDeleteClicked={onDeleteClicked}
                     onRowSelected={onRowSelected}
+                    totals={EVENT_TOTALS}
                 />
                 <EventPopup
                     year={year}
                     season={season}
                     show={showPopup}
+                    events={events}
                     selectedEvent={selectedEditEvent}
                     onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
                     onChange={refreshEvents}
@@ -173,7 +188,10 @@ export default function Events() {
                     year={year}
                     season={season}
                     event={selectedDrillDownEvent}
-                    onReturn={() => {setSelectedDrillDownEvent(undefined);}}
+                    onReturn={() => {
+                            setSelectedDrillDownEvent(undefined);
+                            refreshEvents();
+                    }}
                 />
             </div>}
         </div>

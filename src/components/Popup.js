@@ -2,17 +2,14 @@ import "./Popup.css"
 import React, {useState} from 'react';
 import { Button, Modal, ToggleButton } from 'react-bootstrap';
 
-export default function Popup({
+function Popup({
     show, onHide, title, body,
     showSubmit = true, submitDisabled = false, submitText, onSubmit,
     showAddAnother = false, defaultAddAnother = false}) {
     const [addAnother, setAddAnother] = useState(!!defaultAddAnother);
 
     const onSubmitClicked = () => {
-        onSubmit();
-        if (!addAnother) {
-            onHide();
-        }
+        onSubmit(!addAnother);
     }
 
     return(
@@ -46,3 +43,21 @@ export default function Popup({
     );
 }
   
+function PopupWarning({show, warning, onHide}) {
+    return(
+        <Popup
+            show={show}
+            title="Warning"
+            body={warning}
+            onHide={onHide}
+            showSubmit={false}
+        />
+    );
+}
+
+export {
+    Popup as default,
+    Popup,
+    PopupWarning
+};
+

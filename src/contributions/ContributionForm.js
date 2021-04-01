@@ -19,7 +19,7 @@ export default function ContributionForm() {
     };
 
     return(
-        <div>
+        <div id="mainBody">
             <div className="name">{userState.name}</div>
             <button
                 onClick={onLogout}>

@@ -1,3 +1,7 @@
+#mainBody {
+    padding: 5px;
+}
+
 .name {
     min-inline-size: 200px;
     border: 1px solid black;

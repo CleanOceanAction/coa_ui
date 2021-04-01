@@ -2,11 +2,11 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import EventDetails from "./EventDetails.js";
 import SiteSelector from "../sites/SiteSelector.js";
-import Popup from "../../components/Popup.js";
+import { Popup, PopupWarning } from "../../components/Popup.js";
 import { postData } from "../../BackendAccessor.js";
 import { userContext } from "../UserContext";
 
-export default function EventPopup({show, onHide, onChange, year, season, selectedEvent}) {
+export default function EventPopup({show, onHide, onChange, year, season, events, selectedEvent}) {
     const [submitDisabled, setSubmitDisabled] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
     const [siteId, setSiteId] = useState(undefined);
@@ -17,25 +17,35 @@ export default function EventPopup({show, onHide, onChange, year, season, select
     const [walkingDistance, setWalkingDistance] = useState(null);
 
     const {userState} = useContext(userContext);
+    const [warning, setWarning] = useState("");
 
-    const onSubmit = () => {
+    const onSubmit = (isDone) => {
         console.log("onSubmit");
         if (selectedEvent) {
             updateEvent().then(() => {
                 onChange();
             });
-            onClose();
+            if (isDone) {
+                onClose();
+            }
         }
         else {
-            addEvent().then(() => {
-                onChange();
+            addEvent().then((isSuccessful) => {
+                console.log("Add Event isSuccessful", isSuccessful);
+                if (isSuccessful) {
+                    onChange();
+                    if (isDone) {
+                        onClose();
+                    }
+                }
+                setSiteId(undefined);
+                clearEventDetails();
             });
-            setSiteId(undefined);
-            clearEventDetails();
         }
     };
 
     const onClose = () => {
+        console.log("EventPopup onClose");
         clearEventDetails();
         onHide();
     };
@@ -48,11 +58,19 @@ export default function EventPopup({show, onHide, onChange, year, season, select
     };
 
     const addEvent = () => {
-        const request = generateEventDetailsObj();
-        return postData('events/add', request, userState.token)
-            .then((response) => {
-                return response.json();
-            });
+        const existingEvent = events.find(event => event["site_id"].toString() === siteId.toString());
+        console.log("AddEvent", existingEvent, siteId);
+        if (existingEvent) {
+            setWarning("Site already exists for the given season and year.");
+            return Promise.resolve(false);
+        }
+        else {
+            const request = generateEventDetailsObj();
+            return postData('events/add', request, userState.token)
+                .then((response) => {
+                    return response.json();
+                });
+        }
     }
 
     const updateEvent = () => {
@@ -112,7 +130,6 @@ export default function EventPopup({show, onHide, onChange, year, season, select
             title={(selectedEvent ? "Update" : "Add") + " Event for " + year + " " + season}
             body={
                 <div>
-                    <h4>Location</h4>
                     <SiteSelector
                         isDisabled={isUpdate}
                         siteId={siteId}
@@ -134,6 +151,11 @@ export default function EventPopup({show, onHide, onChange, year, season, select
             submitText={selectedEvent ? "Update": "Add"}
             showAddAnother={!selectedEvent}
             onSubmit={onSubmit}
+        />
+        <PopupWarning
+            show={show && !!warning}
+            warning={warning}
+            onHide={() => {setWarning("");}}
         />
         </div>
     );

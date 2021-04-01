@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import ThreeTierSelect from "../ThreeTierSelect";
 import { getItems } from "./ItemAccessor"
-export default function ItemSelector({isDisabled, itemId, setItemId}) {
+export default function ItemSelector({isDisabled, title="Item", itemId, setItemId}) {
     const [allItems, setAllItems] = useState([]);
     
     useEffect(() => {
@@ -15,6 +15,7 @@ export default function ItemSelector({isDisabled, itemId, setItemId}) {
     return(
         <ThreeTierSelect
             isDisabled={isDisabled}
+            title={title}
             allOptions={allItems}
             tier1Title="Material*"
             tier1Prop="material"
