@@ -13,8 +13,8 @@ export default function EventPopup({show, onHide, onChange, year, season, events
 
     const [numVolunteers, setNumVolunteers] = useState(null);
     const [numTrashBags, setNumTrashBags] = useState(null);
-    const [trashWeight, setTrashWeight] = useState(null);
     const [walkingDistance, setWalkingDistance] = useState(null);
+    const [trashWeight, setTrashWeight] = useState(null);
 
     const {userState} = useContext(userContext);
     const [warning, setWarning] = useState("");
@@ -53,8 +53,8 @@ export default function EventPopup({show, onHide, onChange, year, season, events
     const clearEventDetails = () => {
         setNumVolunteers(null);
         setNumTrashBags(null);
-        setTrashWeight(null);
         setWalkingDistance(null);
+        setTrashWeight(null);
     };
 
     const addEvent = () => {
@@ -90,8 +90,8 @@ export default function EventPopup({show, onHide, onChange, year, season, events
             "volunteer_season": season,
             "volunteer_cnt": numVolunteers,
             "trashbag_cnt": numTrashBags,
+            "walking_distance": walkingDistance,
             "trash_weight": trashWeight,
-            "walking_distance": walkingDistance
         };
     }
 
@@ -101,8 +101,8 @@ export default function EventPopup({show, onHide, onChange, year, season, events
             setSiteId(selectedEvent.site_id);
             setNumVolunteers(selectedEvent.volunteer_cnt);
             setNumTrashBags(selectedEvent.trashbag_cnt);
-            setTrashWeight(selectedEvent.trash_weight);
             setWalkingDistance(selectedEvent.walking_distance);
+            setTrashWeight(selectedEvent.trash_weight);
         }
         else {
             setSubmitDisabled(!siteId);
@@ -117,10 +117,10 @@ export default function EventPopup({show, onHide, onChange, year, season, events
             setSubmitDisabled(
                 selectedEvent.volunteer_cnt === numVolunteers
                 && selectedEvent.trashbag_cnt === numTrashBags
-                && selectedEvent.trash_weight === trashWeight
-                && selectedEvent.walking_distance === walkingDistance);
+                && selectedEvent.walking_distance === walkingDistance
+                && selectedEvent.trash_weight === trashWeight);
         }
-    }, [selectedEvent, numVolunteers, numTrashBags, trashWeight, walkingDistance]);
+    }, [selectedEvent, numVolunteers, numTrashBags, walkingDistance, trashWeight]);
 
     return(
         <div>
@@ -141,10 +141,10 @@ export default function EventPopup({show, onHide, onChange, year, season, events
                         setNumVolunteers={setNumVolunteers}
                         numTrashBags={numTrashBags}
                         setNumTrashBags={setNumTrashBags}
-                        trashWeight={trashWeight}
-                        setTrashWeight={setTrashWeight}
                         walkingDistance={walkingDistance}
-                        setWalkingDistance={setWalkingDistance}/>
+                        setWalkingDistance={setWalkingDistance}
+                        trashWeight={trashWeight}
+                        setTrashWeight={setTrashWeight}/>
                 </div>
             }
             submitDisabled={submitDisabled}
