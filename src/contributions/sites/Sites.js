@@ -3,7 +3,7 @@ import "./Sites.css";
 import React, { useCallback, useEffect, useState } from "react";
 import DataGrid from "../../components/DataGrid";
 import SitePopup from "./SitePopup"
-import Popup from "../../components/Popup";
+import { Popup, PopupWarning } from "../../components/Popup"
 import { getSites, deleteSite } from "./SiteAccessor";
 
 const SITE_COLUMNS = [
@@ -33,6 +33,7 @@ export default function Sites() {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedSite, setSelectedSite] = useState(undefined);
     const [siteToDelete, setSiteToDelete] = useState(undefined);
+    const [warning, setWarning] = useState("");
 
     const refreshSites = useCallback(
         () => {
@@ -71,6 +72,9 @@ export default function Sites() {
         deleteSite(siteToDelete.site_id).then(() => {
             console.log("On delete success: refreshing sites page.");
             refreshSites();
+        }).catch(() => {
+            console.log("On delete failed.");
+            setWarning("Deleting this site failed. This can happen if events still refer to it.");
         });
         setSiteToDelete(undefined);
     }
@@ -102,6 +106,11 @@ export default function Sites() {
                 onHide={() => {setSiteToDelete(undefined);}}
                 onSubmit={onDeleteConfirmed}
                 submitText="Yes"
+            />
+            <PopupWarning
+                show={!!warning}
+                warning={warning}
+                onHide={() => {setWarning("");}}
             />
         </div>
     );

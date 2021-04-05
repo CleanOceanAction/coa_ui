@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import DataGrid from "../../components/DataGrid";
 import EventPopup from "./EventPopup";
 import EventItems from "../event-items/EventItems";
-import Popup from "../../components/Popup";
+import { Popup, PopupWarning } from "../../components/Popup";
 import { getEvents, deleteEvent } from "./EventAccessor";
 import { getSites } from "../sites/SiteAccessor";
 
@@ -54,6 +54,7 @@ export default function Events() {
     const [selectedEditEvent, setSelectedEditEvent] = useState(undefined);
     const [selectedDrillDownEvent, setSelectedDrillDownEvent] = useState(undefined);
     const [showPopup, setShowPopup] = useState(false);
+    const [warning, setWarning] = useState("");
 
     const onAddClicked = () => {
         console.log("Add event clicked.");
@@ -79,6 +80,9 @@ export default function Events() {
         deleteEvent(eventToDelete.event_id).then(() => {
             console.log("On delete success: refreshing events page.");
             refreshEvents();
+        }).catch(() => {
+            console.log("On delete failed.");
+            setWarning("Deleting this event failed. This can happen if event items still refer to it.");
         });
         setEventToDelete(undefined);
     }
@@ -180,6 +184,11 @@ export default function Events() {
                     onHide={() => {setEventToDelete(undefined);}}
                     onSubmit={onDeleteConfirmed}
                     submitText="Yes"
+                />
+                <PopupWarning
+                    show={!!warning}
+                    warning={warning}
+                    onHide={() => {setWarning("");}}
                 />
             </div>
             :
