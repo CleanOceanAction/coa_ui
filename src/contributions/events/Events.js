@@ -18,8 +18,8 @@ const EVENT_COLUMNS = [
     { name: "trash_items_cnt", title: "# of Items" },
     { name: "volunteer_cnt", title: "# of Volunteers" },
     { name: "trashbag_cnt", title: "# of Trashbags" },
-    { name: "trash_weight", title: "Trash Wgt (lbs)" },
     { name: "walking_distance", title: "Est. Distance (mi)" },
+    { name: "trash_weight", title: "Trash Wgt (lbs)" },
     { name: "updated_by", title: "Updated By" },
     { name: "updated_tsp", title: "Updated Time" },
 ];
@@ -28,8 +28,8 @@ const EVENT_TOTALS = [
     "trash_items_cnt",
     "volunteer_cnt",
     "trashbag_cnt",
-    "trash_weight",
     "walking_distance",
+    "trash_weight",
 ];
 
 const COLUMN_EXTENSIONS = [
@@ -37,8 +37,8 @@ const COLUMN_EXTENSIONS = [
     { columnName: "town", width: 180 },
     { columnName: "volunteer_cnt", width: 140 },
     { columnName: "trashbag_cnt", width: 135 },
+    { columnName: "walking_distance", width: 155 },
     { columnName: "trash_weight", width: 140 },
-    { columnName: "walking_distance", width: 155 }
 ];
 
 const DEFAULT_SORTING = [
