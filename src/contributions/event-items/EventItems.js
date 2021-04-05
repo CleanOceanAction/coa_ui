@@ -5,7 +5,7 @@ import DataGrid from "../../components/DataGrid";
 import EventItemPopup from "./EventItemPopup"
 import { getEventItems, deleteEventItem } from "./EventItemsAccessor";
 import { getItems } from "../items/ItemAccessor";
-import Popup from '../../components/Popup';
+import { Popup, PopupWarning } from "../../components/Popup";
 
 const EVENT_ITEM_COLUMNS = [
     { name: "record_id", title: "Record Id" },
@@ -41,6 +41,7 @@ export default function EventItems({event, year, season, onReturn}) {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedEventItem, setSelectedEventItem] = useState(undefined);
     const [eventItemToDelete, setEventItemToDelete] = useState(undefined);
+    const [warning, setWarning] = useState("");
 
     const onAddClicked = () => {
         console.log("Add event item clicked.");
@@ -66,6 +67,9 @@ export default function EventItems({event, year, season, onReturn}) {
         deleteEventItem(eventItemToDelete.record_id).then(() => {
             console.log("On delete success: refreshing event items page.");
             refreshEventItems();
+        }).catch(() => {
+            console.log("On delete failed.");
+            setWarning("Deleting this event item failed.");
         });
         setEventItemToDelete(undefined);
     }
@@ -143,6 +147,11 @@ export default function EventItems({event, year, season, onReturn}) {
                 onHide={() => {setEventItemToDelete(undefined);}}
                 onSubmit={onDeleteConfirmed}
                 submitText="Yes"
+            />
+            <PopupWarning
+                show={!!warning}
+                warning={warning}
+                onHide={() => {setWarning("");}}
             />
         </div>
     );

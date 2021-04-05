@@ -3,7 +3,7 @@ import "./Items.css";
 import React, { useCallback, useEffect, useState } from "react";
 import DataGrid from "../../components/DataGrid";
 import ItemPopup from "./ItemPopup"
-import Popup from "../../components/Popup"
+import { Popup, PopupWarning } from "../../components/Popup"
 import { getItems, deleteItem } from "./ItemAccessor.js";
 
 const ITEM_COLUMNS = [
@@ -24,6 +24,7 @@ export default function Items() {
     const [showPopup, setShowPopup] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(undefined);
     const [selectedItem, setSelectedItem] = useState(undefined);
+    const [warning, setWarning] = useState("");
 
     const onAddClicked = () => {
         console.log("Add item clicked.");
@@ -62,6 +63,10 @@ export default function Items() {
         deleteItem(itemToDelete.item_id).then(() => {
             console.log("On delete success: refreshing items page.");
             refreshItems();
+        })
+        .catch(() => {
+            console.log("On delete failed.");
+            setWarning("Deleting this item failed. This can happen if event items still refer to it.");
         });
         setItemToDelete(undefined);
     }
@@ -94,6 +99,11 @@ export default function Items() {
                 onHide={() => {setItemToDelete(undefined);}}
                 onSubmit={onDeleteConfirmed}
                 submitText="Yes"
+            />
+            <PopupWarning
+                show={!!warning}
+                warning={warning}
+                onHide={() => {setWarning("");}}
             />
         </div>
     );
