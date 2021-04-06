@@ -108,9 +108,8 @@ export default function Events() {
         }, [year, season, siteMap]
     );
 
-    useEffect(() => {
-        console.log(year, season);
-        if (Object.keys(siteMap).length === 0) {
+    const refreshSiteMap = useCallback(
+        () => {
             getSites()
             .then((sites) => {
                 if (sites) {
@@ -121,12 +120,19 @@ export default function Events() {
                     setSiteMap(sitesObj);
                 }
             });
+        }, []
+    );
+
+    useEffect(() => {
+        console.log(year, season);
+        if (Object.keys(siteMap).length === 0) {
+            refreshSiteMap();
         }
         else {
             refreshEvents();
         }
         
-    }, [year, season, siteMap, refreshEvents]);
+    }, [year, season, siteMap, refreshEvents, refreshSiteMap]);
 
     return(
         <div>
@@ -174,7 +180,7 @@ export default function Events() {
                     events={events}
                     selectedEvent={selectedEditEvent}
                     onHide={() => {setShowPopup(false); setSelectedEditEvent(undefined);}}
-                    onChange={refreshEvents}
+                    onChange={refreshSiteMap}
                 />
                 <Popup
                     show={!!eventToDelete}

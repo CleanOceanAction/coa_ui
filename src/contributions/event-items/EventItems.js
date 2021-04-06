@@ -91,8 +91,8 @@ export default function EventItems({event, year, season, onReturn}) {
         }, [event, itemMap]
     );
 
-    useEffect(() => {
-        if (Object.keys(itemMap).length === 0) {
+    const refreshItemMap = useCallback(
+        () => {
             getItems()
             .then((items) => {
                 if (items) {
@@ -103,12 +103,18 @@ export default function EventItems({event, year, season, onReturn}) {
                     setItemMap(itemsObj);
                 }
             });
+        }, []
+    );
+
+    useEffect(() => {
+        if (Object.keys(itemMap).length === 0) {
+            refreshItemMap();
         }
         else {
             refreshEventItems();
         }
         
-    }, [event, itemMap, refreshEventItems]);
+    }, [event, itemMap, refreshEventItems, refreshItemMap]);
 
     return(
         <div>
@@ -136,7 +142,7 @@ export default function EventItems({event, year, season, onReturn}) {
                 event={event}
                 selectedEventItem={selectedEventItem}
                 onHide={() => {setShowPopup(false); setSelectedEventItem(undefined);}}
-                onChange={refreshEventItems}
+                onChange={refreshItemMap}
             />
             <Popup
                 show={!!eventItemToDelete}
