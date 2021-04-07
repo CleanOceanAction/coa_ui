@@ -7,6 +7,9 @@ import { LinkContainer } from "react-router-bootstrap";
 
 import Routes from "./Routes";
 
+const COA_URL = "http://www.cleanoceanaction.org/index.php?id=2";
+const SUPERSET_URL = "http://coa-superset-prod.eba-b9cczgua.us-east-1.elasticbeanstalk.com/superset/dashboard/coa-ui/?preselect_filters=%7B%221%22%3A%20%7B%22__time_range%22%3A%20%22No%20filter%22%7D%7D";
+
 class HeaderNavigation extends Component {
   render() {
     return (
@@ -14,18 +17,27 @@ class HeaderNavigation extends Component {
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/about">Clean Ocean Action</Link>
+              <Link
+	    	to={COA_URL}
+	        target="_blank"
+	      >
+	        Clean Ocean Action
+	      </Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/visualizations">
-              <NavItem>Visualizations</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/about">
-              <NavItem>About</NavItem>
-            </LinkContainer>
+            <Navbar.Text>
+	      <Navbar.Link href={SUPERSET_URL} target="_blank">
+	        Visualizations
+              </Navbar.Link>
+            </Navbar.Text>
+            <Navbar.Text>
+	      <Navbar.Link href={COA_URL} target="_blank">
+	        About
+	      </Navbar.Link>
+            </Navbar.Text>
             <LinkContainer to="/contributions">
               <NavItem>Contribution</NavItem>
             </LinkContainer>
