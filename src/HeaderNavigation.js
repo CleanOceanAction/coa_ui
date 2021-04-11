@@ -2,7 +2,6 @@ import "./HeaderNavigation.css"
 
 import React, { Component } from "react";
 import { Navbar, Nav, NavItem } from "react-bootstrap"
-import { Link } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 
 import Routes from "./Routes";
@@ -17,12 +16,9 @@ class HeaderNavigation extends Component {
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link
-	    	to={COA_URL}
-	        target="_blank"
-	      >
+	      <Navbar.Link href={COA_URL} target="_blank">
 	        Clean Ocean Action
-	      </Link>
+	      </Navbar.Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
