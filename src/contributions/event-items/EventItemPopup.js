@@ -1,5 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 
+import "./EventItemPopup.css";
+
 import ItemSelector from "../items/ItemSelector";
 import { Popup, PopupWarning } from "../../components/Popup";
 import PositiveIntegerInput from "../../components/PositiveIntegerInput";
