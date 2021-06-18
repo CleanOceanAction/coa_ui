@@ -83,11 +83,11 @@ export default function ThreeTierSelect({isDisabled, title, allOptions,
         else {
             setSelection({
                 "tier1": selection.tier1,
-                "tier2": selection.tier2,
+                "tier2": {}, // clear tier2 when the selection is cleared
                 "tier3": {}
             });
         }
-    }, [allOptions, selectedId, selection.tier1, selection.tier2, selection.tier3.value, tier1Prop, tier2Prop, tier3Prop, idProp]);
+    }, [allOptions, selectedId, selection.tier1, selection.tier2.value, selection.tier3.value, tier1Prop, tier2Prop, tier3Prop, idProp]);
 
     useEffect(() => {
         console.log("ThreeTierSelect::useEffect selection", selection);
