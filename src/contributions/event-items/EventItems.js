@@ -24,9 +24,7 @@ const EVENT_ITEM_TOTALS = [
 ];
 
 const DEFAULT_SORTING = [
-    { columnName: "material", direction: "asc" },
-    { columnName: "category", direction: "asc" },
-    { columnName: "item_name", direction: "asc" },
+    { columnName: "updated_tsp", direction: "asc" }
 ];
 
 const DEFAULT_HIDDEN_COLUMN_NAMES = [
